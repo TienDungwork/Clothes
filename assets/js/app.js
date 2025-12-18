@@ -50,7 +50,7 @@ const Utils = {
      */
     throttle(func, limit) {
         let inThrottle;
-        return function(...args) {
+        return function (...args) {
             if (!inThrottle) {
                 func.apply(this, args);
                 inThrottle = true;
@@ -97,7 +97,7 @@ const API = {
     async request(action, options = {}) {
         const url = new URL(CONFIG.API_URL, window.location.origin);
         url.searchParams.set('action', action);
-        
+
         // Add query params for GET requests
         if (options.params) {
             Object.entries(options.params).forEach(([key, value]) => {
@@ -122,11 +122,11 @@ const API = {
         try {
             const response = await fetch(url.toString(), fetchOptions);
             const data = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(data.message || 'Request failed');
             }
-            
+
             return data;
         } catch (error) {
             console.error('API Error:', error);
@@ -165,8 +165,8 @@ const API = {
     },
 
     getRelatedProducts(productId, categoryId, limit = 4) {
-        return this.request('products.related', { 
-            params: { product_id: productId, category_id: categoryId, limit } 
+        return this.request('products.related', {
+            params: { product_id: productId, category_id: categoryId, limit }
         });
     },
 
@@ -344,7 +344,7 @@ const CartManager = {
     async add(productId, quantity = 1, variantId = null) {
         try {
             const response = await API.addToCart(productId, quantity, variantId);
-            
+
             if (response.success) {
                 this.cart = response.cart;
                 this.updateUI();
@@ -361,7 +361,7 @@ const CartManager = {
     async update(itemId, quantity) {
         try {
             const response = await API.updateCart(itemId, quantity);
-            
+
             if (response.success) {
                 this.cart = response.cart;
                 this.updateUI();
@@ -376,7 +376,7 @@ const CartManager = {
     async remove(itemId) {
         try {
             const response = await API.removeFromCart(itemId);
-            
+
             if (response.success) {
                 this.cart = response.cart;
                 this.updateUI();
@@ -392,7 +392,7 @@ const CartManager = {
     async applyCoupon(code) {
         try {
             const response = await API.applyCoupon(code);
-            
+
             if (response.success) {
                 Toast.success(response.message);
                 return response;
@@ -498,7 +498,7 @@ const ProductManager = {
         }
 
         const bgIndex = (index % 8) + 1;
-        
+
         return `
             <div class="product-card" data-product-id="${product.id}">
                 <div class="product-image">
@@ -534,14 +534,14 @@ const ProductManager = {
         const fullStars = Math.floor(rating);
         const halfStar = rating % 1 >= 0.5;
         let stars = '';
-        
+
         for (let i = 0; i < fullStars; i++) {
             stars += '⭐';
         }
         if (halfStar) {
             stars += '⭐';
         }
-        
+
         return stars || '⭐';
     },
 
@@ -557,7 +557,7 @@ const ProductManager = {
             'Áo Thun': '👕',
             default: '👔'
         };
-        
+
         for (const [key, emoji] of Object.entries(emojis)) {
             if (category && category.includes(key)) {
                 return emoji;
@@ -573,13 +573,13 @@ const ProductManager = {
             tab.addEventListener('click', async () => {
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-                
+
                 const tabName = tab.textContent.toLowerCase();
                 let tabType = 'all';
                 if (tabName.includes('mới')) tabType = 'new';
                 else if (tabName.includes('chạy')) tabType = 'bestseller';
                 else if (tabName.includes('giá') || tabName.includes('sale')) tabType = 'sale';
-                
+
                 await this.loadProducts(tabType);
             });
         });
@@ -598,11 +598,11 @@ const ProductManager = {
         try {
             const response = await API.getProduct(productId);
             const product = response.data;
-            
+
             // Create and show modal
             const modal = this.createQuickViewModal(product);
             document.body.appendChild(modal);
-            
+
             // Animate in
             requestAnimationFrame(() => {
                 modal.classList.add('active');
@@ -621,10 +621,10 @@ const ProductManager = {
                 <button class="quickview-close" onclick="this.closest('.quickview-modal').remove()">×</button>
                 <div class="quickview-body">
                     <div class="quickview-image">
-                        ${product.images?.[0] ? 
-                            `<img src="${product.images[0].image_url}" alt="${product.name}">` : 
-                            '<div class="placeholder-image">👔</div>'
-                        }
+                        ${product.images?.[0] ?
+                `<img src="${product.images[0].image_url}" alt="${product.name}">` :
+                '<div class="placeholder-image">👔</div>'
+            }
                     </div>
                     <div class="quickview-info">
                         <h2>${product.name}</h2>
@@ -639,17 +639,17 @@ const ProductManager = {
                                 <div class="variant-group">
                                     <label>Kích thước:</label>
                                     <div class="variant-options">
-                                        ${[...new Set(product.variants.map(v => v.size))].filter(Boolean).map(size => 
-                                            `<button class="variant-option" data-size="${size}">${size}</button>`
-                                        ).join('')}
+                                        ${[...new Set(product.variants.map(v => v.size))].filter(Boolean).map(size =>
+                `<button class="variant-option" data-size="${size}">${size}</button>`
+            ).join('')}
                                     </div>
                                 </div>
                                 <div class="variant-group">
                                     <label>Màu sắc:</label>
                                     <div class="variant-options">
-                                        ${[...new Set(product.variants.map(v => v.color))].filter(Boolean).map(color => 
-                                            `<button class="variant-option color-option" data-color="${color}" style="background-color: ${product.variants.find(v => v.color === color)?.color_code || '#ccc'}"></button>`
-                                        ).join('')}
+                                        ${[...new Set(product.variants.map(v => v.color))].filter(Boolean).map(color =>
+                `<button class="variant-option color-option" data-color="${color}" style="background-color: ${product.variants.find(v => v.color === color)?.color_code || '#ccc'}"></button>`
+            ).join('')}
                                     </div>
                                 </div>
                             </div>
@@ -787,7 +787,7 @@ const SearchManager = {
                 </a>
             `).join('');
         }
-        
+
         this.resultsContainer.style.display = 'block';
     },
 
@@ -806,10 +806,10 @@ const NewsletterHandler = {
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const emailInput = form.querySelector('input[type="email"]');
             const email = emailInput.value.trim();
-            
+
             if (!email) {
                 Toast.error('Vui lòng nhập email');
                 return;
@@ -822,7 +822,7 @@ const NewsletterHandler = {
 
             try {
                 const response = await API.subscribeNewsletter(email);
-                
+
                 if (response.success) {
                     Toast.success(response.message);
                     emailInput.value = '';
@@ -883,7 +883,7 @@ const UIEnhancements = {
 
     initScrollReveal() {
         const elements = document.querySelectorAll('.section');
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -937,7 +937,7 @@ const UIEnhancements = {
     initMobileMenu() {
         const toggle = document.getElementById('menuToggle');
         const navMenu = document.querySelector('.nav-menu');
-        
+
         if (!toggle || !navMenu) return;
 
         toggle.addEventListener('click', () => {
@@ -988,6 +988,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await ProductManager.init();
     SearchManager.init();
     NewsletterHandler.init();
+
+    // Initialize auth manager
+    if (typeof AuthManager !== 'undefined') {
+        AuthManager.init();
+    }
     LazyLoader.init();
 
     console.log('🛍️ LUXE Fashion initialized successfully!');

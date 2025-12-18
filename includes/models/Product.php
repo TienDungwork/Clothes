@@ -109,8 +109,7 @@ class Product
         $total = $this->db->query($countSql, $params)->fetchColumn();
 
         // Get products
-        $sql = "SELECT p.*, c.name as category_name, c.slug as category_slug,
-                       (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image
+        $sql = "SELECT p.*, c.name as category_name, c.slug as category_slug
                 FROM {$this->table} p
                 LEFT JOIN categories c ON p.category_id = c.id
                 WHERE {$whereClause}
@@ -198,7 +197,7 @@ class Product
     public function getFeatured(int $limit = 8): array
     {
         $sql = "SELECT p.*, c.name as category_name,
-                       (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image
+                       COALESCE(p.image, (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1)) as image
                 FROM {$this->table} p
                 LEFT JOIN categories c ON p.category_id = c.id
                 WHERE p.status = 'active' AND p.is_featured = 1
@@ -214,7 +213,7 @@ class Product
     public function getNewArrivals(int $limit = 8): array
     {
         $sql = "SELECT p.*, c.name as category_name,
-                       (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image
+                       COALESCE(p.image, (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1)) as image
                 FROM {$this->table} p
                 LEFT JOIN categories c ON p.category_id = c.id
                 WHERE p.status = 'active' AND p.is_new = 1
@@ -230,7 +229,7 @@ class Product
     public function getBestsellers(int $limit = 8): array
     {
         $sql = "SELECT p.*, c.name as category_name,
-                       (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image
+                       COALESCE(p.image, (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1)) as image
                 FROM {$this->table} p
                 LEFT JOIN categories c ON p.category_id = c.id
                 WHERE p.status = 'active' AND p.is_bestseller = 1
@@ -246,7 +245,7 @@ class Product
     public function getOnSale(int $limit = 8): array
     {
         $sql = "SELECT p.*, c.name as category_name,
-                       (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image,
+                       COALESCE(p.image, (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1)) as image,
                        ROUND((1 - p.sale_price / p.price) * 100) as discount_percent
                 FROM {$this->table} p
                 LEFT JOIN categories c ON p.category_id = c.id
@@ -263,7 +262,7 @@ class Product
     public function getRelated(int $productId, int $categoryId, int $limit = 4): array
     {
         $sql = "SELECT p.*, c.name as category_name,
-                       (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image
+                       COALESCE(p.image, (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1)) as image
                 FROM {$this->table} p
                 LEFT JOIN categories c ON p.category_id = c.id
                 WHERE p.status = 'active' AND p.category_id = ? AND p.id != ?
@@ -279,7 +278,7 @@ class Product
     public function search(string $keyword, int $limit = 10): array
     {
         $sql = "SELECT p.id, p.name, p.slug, p.price, p.sale_price,
-                       (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image
+                       COALESCE(p.image, (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1)) as image
                 FROM {$this->table} p
                 WHERE p.status = 'active' AND (
                     p.name LIKE ? OR 

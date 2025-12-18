@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập / Đăng Ký | LUXE Fashion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/footer.css">
+    <link rel="stylesheet" href="assets/css/modal.css">
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            padding: 160px 0 60px;
+            background: linear-gradient(135deg, #fdf6f0 0%, #f8ece3 50%, #faf8f5 100%);
+            display: flex;
+            align-items: center;
+        }
+
+        .auth-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .auth-visual {
+            text-align: center;
+        }
+
+        .auth-visual-icon {
+            font-size: 12rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .auth-visual h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            margin-top: 20px;
+        }
+
+        .auth-visual p {
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        .auth-box {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 40px;
+            max-width: 450px;
+        }
+
+        .auth-box-title {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            margin-bottom: 10px;
+        }
+
+        .auth-box-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all var(--transition);
+        }
+
+        .social-btn:hover {
+            background: var(--bg-light);
+            border-color: var(--text-muted);
+        }
+
+        .social-btn.google {
+            color: #ea4335;
+        }
+
+        .social-btn.facebook {
+            color: #1877f2;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: all var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--secondary);
+        }
+
+        .forgot-link {
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all var(--transition);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-secondary);
+        }
+
+        .auth-switch a {
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all var(--transition);
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+        }
+
+        .auth-tab.active {
+            color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        .auth-tab:hover {
+            color: var(--secondary);
+        }
+
+        .user-profile {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .user-profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: var(--white);
+            font-size: 2.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .user-profile-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .user-profile-email {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .profile-menu {
+            text-align: left;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .profile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all var(--transition);
+        }
+
+        .profile-menu-item:hover {
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: var(--bg-light);
+            border-radius: var(--radius);
+            color: #ef4444;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #fee2e2;
+        }
+
+        @media (max-width: 992px) {
+            .auth-container {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-visual {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <header class="header" id="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-left">
+                    <span>📞 Hotline: 1900 xxxx</span>
+                </div>
+                <div class="header-top-right">
+                    <a href="#">Hỗ trợ</a>
+                </div>
+            </div>
+        </div> -->
+    <div class="header-main">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><img src="assets/icons/logo.jpg" alt="logo-icon"></div>
+                LUXE
+            </a>
+            <nav class="nav">
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Trang Chủ</a></li>
+                    <li><a href="products.html?category=nam" class="nav-link">Thời Trang Nam</a></li>
+                    <li><a href="products.html?category=nu" class="nav-link">Thời Trang Nữ</a></li>
+                    <li><a href="products.html?category=phu-kien" class="nav-link">Phụ Kiện</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="cart.html" class="header-icon" title="Giỏ hàng">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </header>
+
+    <section class="auth-page">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-visual">
+                    <div class="auth-visual-icon">👗</div>
+                    <h2>Chào mừng đến LUXE</h2>
+                    <p>Đăng nhập để nhận ưu đãi độc quyền</p>
+                </div>
+
+                <div class="auth-box" id="authBox">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login">Đăng nhập</button>
+                        <button class="auth-tab" data-tab="register">Đăng ký</button>
+                    </div>
+
+                    <div id="loginPanel">
+                        <div class="social-login">
+                            <button class="social-btn google">
+                                <span>G</span> Google
+                            </button>
+                            <button class="social-btn facebook">
+                                <span>f</span> Facebook
+                            </button>
+                        </div>
+                        <div class="divider">hoặc</div>
+
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" name="email" required
+                                    placeholder="email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-input" name="password" required
+                                    placeholder="••••••••">
+                            </div>
+                            <div class="form-row">
+                                <label class="form-checkbox">
+                                    <input type="checkbox" name="remember">
+                                    <span>Ghi nhớ đăng nhập</span>
+                                </label>
+                                <a href="#" class="forgot-link">Quên mật khẩu?</a>
+                            </div>
+                            <button type="submit" class="submit-btn">Đăng nhập</button>
+                        </form>
+                    </div>
+
+                    <div id="registerPanel" style="display: none;">
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" class="form-input" name="full_name" required
+                                    placeholder="Nguyễn Văn A">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" name="email" required
+                                    placeholder="email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-input" name="phone" placeholder="0909123456">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-input" name="password" required
+                                    placeholder="Tối thiểu 6 ký tự">
+                            </div>
+                            <button type="submit" class="submit-btn">Đăng ký</button>
+                        </form>
+                    </div>
+
+                    <div id="profilePanel" style="display: none;">
+                        <div class="user-profile">
+                            <div class="user-profile-avatar" id="profileAvatar">U</div>
+                            <div class="user-profile-name" id="profileName">Người dùng</div>
+                            <div class="user-profile-email" id="profileEmail">user@example.com</div>
+                        </div>
+                        <div class="profile-menu">
+                            <a href="#" class="profile-menu-item">👤 Thông tin tài khoản</a>
+                            <a href="#" class="profile-menu-item">📦 Đơn hàng của tôi</a>
+                            <a href="#" class="profile-menu-item">❤️ Sản phẩm yêu thích</a>
+                            <a href="#" class="profile-menu-item">📍 Địa chỉ giao hàng</a>
+                            <a href="#" class="profile-menu-item">🔔 Thông báo</a>
+                        </div>
+                        <button class="logout-btn" id="logoutBtn">Đăng xuất</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="assets/js/app.js"></script>
+    <script>
+        // CONFIG already defined in app.js
+
+        document.addEventListener('DOMContentLoaded', () => {
+            Toast.init();
+            checkAuth();
+
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const panel = tab.dataset.tab;
+                    document.getElementById('loginPanel').style.display = panel === 'login' ? 'block' : 'none';
+                    document.getElementById('registerPanel').style.display = panel === 'register' ? 'block' : 'none';
+                });
+            });
+
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const btn = form.querySelector('.submit-btn');
+                btn.disabled = true;
+                btn.textContent = 'Đang xử lý...';
+
+                try {
+                    const response = await fetch(`${CONFIG.API_URL}?action=auth.login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: form.email.value,
+                            password: form.password.value,
+                            remember: form.remember.checked
+                        })
+                    });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        sessionStorage.setItem('luxe_user', JSON.stringify(data.user));
+                        Toast.success('Đăng nhập thành công!');
+                        checkAuth();
+                    } else {
+                        Toast.error(data.message);
+                    }
+                } catch (err) {
+                    Toast.error('Có lỗi xảy ra');
+                }
+
+                btn.disabled = false;
+                btn.textContent = 'Đăng nhập';
+            });
+
+            document.getElementById('registerForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const btn = form.querySelector('.submit-btn');
+                btn.disabled = true;
+                btn.textContent = 'Đang xử lý...';
+
+                try {
+                    const response = await fetch(`${CONFIG.API_URL}?action=auth.register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            full_name: form.full_name.value,
+                            email: form.email.value,
+                            phone: form.phone.value,
+                            password: form.password.value
+                        })
+                    });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        Toast.success('Đăng ký thành công! Vui lòng đăng nhập.');
+                        document.querySelector('[data-tab="login"]').click();
+                        form.reset();
+                    } else {
+                        Toast.error(data.message);
+                    }
+                } catch (err) {
+                    Toast.error('Có lỗi xảy ra');
+                }
+
+                btn.disabled = false;
+                btn.textContent = 'Đăng ký';
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                try {
+                    await fetch(`${CONFIG.API_URL}?action=auth.logout`, { method: 'POST' });
+                } catch (e) { }
+                sessionStorage.removeItem('luxe_user');
+                Toast.success('Đã đăng xuất');
+                checkAuth();
+            });
+        });
+
+        function checkAuth() {
+            const user = sessionStorage.getItem('luxe_user');
+            const authTabs = document.querySelector('.auth-tabs');
+            const loginPanel = document.getElementById('loginPanel');
+            const registerPanel = document.getElementById('registerPanel');
+            const profilePanel = document.getElementById('profilePanel');
+
+            if (user) {
+                const userData = JSON.parse(user);
+                authTabs.style.display = 'none';
+                loginPanel.style.display = 'none';
+                registerPanel.style.display = 'none';
+                profilePanel.style.display = 'block';
+
+                document.getElementById('profileAvatar').textContent = userData.full_name?.charAt(0).toUpperCase() || 'U';
+                document.getElementById('profileName').textContent = userData.full_name || 'Người dùng';
+                document.getElementById('profileEmail').textContent = userData.email || '';
+            } else {
+                authTabs.style.display = 'flex';
+                loginPanel.style.display = 'block';
+                registerPanel.style.display = 'none';
+                profilePanel.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
