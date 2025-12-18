@@ -4,66 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="LUXE Fashion - Shop thời trang cao cấp với bộ sưu tập mới nhất. Mua sắm quần áo nam nữ, phụ kiện thời trang với ưu đãi hấp dẫn.">
-    <meta name="keywords" content="thời trang, quần áo, shop online, fashion, clothing, luxe">
+    <meta name="description" content="LUXE Fashion - Shop thời trang cao cấp với bộ sưu tập mới nhất.">
     <title>LUXE Fashion | Thời Trang Cao Cấp</title>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
         rel="stylesheet">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/hero.css">
+    <link rel="stylesheet" href="assets/css/products.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/footer.css">
+    <link rel="stylesheet" href="assets/css/modal.css">
 </head>
 
 <body>
-    <!-- ==================== HEADER ==================== -->
     <header class="header" id="header">
-        <!-- Top Bar -->
-        <div class="header-top">
-            <div class="container">
+        <!-- <div class="header-top"> -->
+        <!-- <div class="container">
                 <div class="header-top-left">
-                    <span>📞 Hotline: 1900 xxxx</span>
-                    <span>📧 support@luxefashion.vn</span>
+                    <span>Hotline: 1900 xxxx</span>
+                    <span>support@luxefashion.vn</span>
                 </div>
                 <div class="header-top-right">
                     <a href="#">Theo dõi đơn hàng</a>
                     <span>|</span>
                     <a href="#">Hỗ trợ</a>
                 </div>
-            </div>
+            </div> -->
         </div>
 
-        <!-- Main Header -->
         <div class="header-main">
             <div class="container">
-                <!-- Logo -->
-                <a href="#" class="logo">
-                    <div class="logo-icon">✨</div>
+                <a href="index.html" class="logo">
+                    <div class="logo-icon"><img src="assets/icons/logo.jpg" alt="logo-icon"></div>
                     LUXE
                 </a>
 
-                <!-- Navigation -->
                 <nav class="nav">
                     <ul class="nav-menu">
-                        <li><a href="#" class="nav-link active">Trang Chủ</a></li>
-                        <li><a href="#" class="nav-link">Thời Trang Nam</a></li>
-                        <li><a href="#" class="nav-link">Thời Trang Nữ</a></li>
-                        <li><a href="#" class="nav-link">Phụ Kiện</a></li>
-                        <li><a href="#" class="nav-link">Bộ Sưu Tập</a></li>
-                        <li><a href="#" class="nav-link">Sale</a></li>
+                        <li><a href="index.html" class="nav-link active">Trang Chủ</a></li>
+                        <li><a href="products.html?category=nam" class="nav-link">Thời Trang Nam</a></li>
+                        <li><a href="products.html?category=nu" class="nav-link">Thời Trang Nữ</a></li>
+                        <li><a href="products.html?category=phu-kien" class="nav-link">Phụ Kiện</a></li>
+                        <li><a href="products.html" class="nav-link">Bộ Sưu Tập</a></li>
+                        <li><a href="products.html?sale=1" class="nav-link">Sale</a></li>
                     </ul>
                 </nav>
 
-                <!-- Header Actions -->
                 <div class="header-actions">
-                    <!-- Search -->
                     <div class="header-search">
-                        <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                        <input type="text" placeholder="Tìm kiếm sản phẩm..." id="searchInput">
                         <button type="button">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
@@ -73,17 +68,15 @@
                         </button>
                     </div>
 
-                    <!-- User -->
-                    <a href="#" class="header-icon" title="Tài khoản">
+                    <button class="header-icon" title="Tài khoản" onclick="AuthManager.showLogin()">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                    </a>
+                    </button>
 
-                    <!-- Wishlist -->
-                    <a href="#" class="header-icon" title="Yêu thích">
+                    <a href="auth.html" class="header-icon" title="Yêu thích">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path
@@ -92,18 +85,16 @@
                         </svg>
                     </a>
 
-                    <!-- Cart -->
-                    <a href="#" class="header-icon" title="Giỏ hàng">
+                    <a href="cart.html" class="header-icon" title="Giỏ hàng">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        <span class="cart-count">3</span>
+                        <span class="cart-count">0</span>
                     </a>
 
-                    <!-- Mobile Menu Toggle -->
                     <button class="menu-toggle" id="menuToggle">
                         <span></span>
                         <span></span>
@@ -114,7 +105,6 @@
         </div>
     </header>
 
-    <!-- ==================== HERO SECTION ==================== -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
@@ -132,11 +122,10 @@
                     Định Hình Xu Hướng
                 </h1>
                 <p class="hero-description">
-                    Khám phá bộ sưu tập thời trang cao cấp mới nhất. Thiết kế tinh tế,
-                    chất liệu sang trọng, mang đến cho bạn vẻ đẹp hoàn hảo.
+                    Khám phá bộ sưu tập thời trang cao cấp mới nhất. Thiết kế tinh tế, chất liệu sang trọng.
                 </p>
                 <div class="hero-buttons">
-                    <a href="#" class="btn btn-primary">Khám Phá Ngay</a>
+                    <a href="#products" class="btn btn-primary">Khám Phá Ngay</a>
                     <a href="#" class="btn btn-outline">Xem Bộ Sưu Tập</a>
                 </div>
                 <div class="hero-stats">
@@ -155,101 +144,68 @@
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="hero-image-main">👗</div>
-                <div class="hero-image-floating">
+                <div class="hero-image-main"><img src="assets/icons/hero-image-main.jpg" alt=""></div>
+                <!-- <div class="hero-image-floating">
                     <span class="floating-card-icon">👔</span>
                     <span class="floating-card-text">Áo Sơ Mi</span>
                     <span class="floating-card-price">890.000đ</span>
-                </div>
-                <div class="hero-image-floating">
+                </div> -->
+                <!-- <div class="hero-image-floating">
                     <span class="floating-card-icon">👜</span>
                     <span class="floating-card-text">Túi Xách</span>
                     <span class="floating-card-price">1.290.000đ</span>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
 
-    <!-- ==================== CATEGORIES SECTION ==================== -->
     <section class="categories section">
         <div class="container">
             <h2 class="section-title">Danh Mục Sản Phẩm</h2>
-            <p class="section-subtitle">Khám phá các bộ sưu tập thời trang đa dạng của chúng tôi</p>
+            <p class="section-subtitle">Khám phá các bộ sưu tập thời trang đa dạng</p>
 
             <div class="categories-grid">
-                <!-- Category 1: Men -->
                 <div class="category-card">
                     <div class="category-bg"></div>
-                    <span class="category-icon">👔</span>
+                    <img src="assets/icons/pants.png" alt="Thời Trang Nam" class="category-icon">
                     <div class="category-content">
                         <h3 class="category-title">Thời Trang Nam</h3>
                         <p class="category-count">250+ sản phẩm</p>
-                        <a href="#" class="category-link">
-                            Khám phá
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14m-7-7 7 7-7 7" />
-                            </svg>
-                        </a>
+                        <a href="products.html?category=nam" class="category-link">Khám phá →</a>
                     </div>
                 </div>
-
-                <!-- Category 2: Women -->
                 <div class="category-card">
                     <div class="category-bg"></div>
-                    <span class="category-icon">👗</span>
+                    <img src="assets/icons/bas33544.png" alt="Thời Trang Nữ" class="category-icon">
                     <div class="category-content">
                         <h3 class="category-title">Thời Trang Nữ</h3>
                         <p class="category-count">380+ sản phẩm</p>
-                        <a href="#" class="category-link">
-                            Khám phá
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14m-7-7 7 7-7 7" />
-                            </svg>
-                        </a>
+                        <a href="products.html?category=nu" class="category-link">Khám phá →</a>
                     </div>
                 </div>
-
-                <!-- Category 3: Accessories -->
                 <div class="category-card">
                     <div class="category-bg"></div>
-                    <span class="category-icon">👜</span>
+                    <img src="assets/icons/phukien.png" alt="Phụ Kiện" class="category-icon">
                     <div class="category-content">
                         <h3 class="category-title">Phụ Kiện</h3>
                         <p class="category-count">150+ sản phẩm</p>
-                        <a href="#" class="category-link">
-                            Khám phá
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14m-7-7 7 7-7 7" />
-                            </svg>
-                        </a>
+                        <a href="products.html?category=phu-kien" class="category-link">Khám phá →</a>
                     </div>
                 </div>
-
-                <!-- Category 4: Sale -->
                 <div class="category-card">
                     <div class="category-bg"></div>
-                    <span class="category-icon">🏷️</span>
+                    <img src="assets/icons/sale.png" alt="Khuyến Mãi" class="category-icon">
                     <div class="category-content">
                         <h3 class="category-title">Khuyến Mãi</h3>
                         <p class="category-count">Giảm đến 50%</p>
-                        <a href="#" class="category-link">
-                            Xem ngay
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14m-7-7 7 7-7 7" />
-                            </svg>
-                        </a>
+                        <a href="products.html?sale=1" class="category-link">Xem ngay →</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==================== PRODUCTS SECTION ==================== -->
-    <section class="products section">
+    <section class="products section" id="products">
         <div class="container">
             <div class="products-header">
                 <div class="products-header-left">
@@ -257,227 +213,30 @@
                     <p class="section-subtitle">Những thiết kế được yêu thích nhất</p>
                 </div>
                 <div class="products-tabs">
-                    <button class="product-tab active">Tất Cả</button>
-                    <button class="product-tab">Mới Nhất</button>
-                    <button class="product-tab">Bán Chạy</button>
-                    <button class="product-tab">Giảm Giá</button>
+                    <button class="product-tab active" data-tab="all">Tất Cả</button>
+                    <button class="product-tab" data-tab="new">Mới Nhất</button>
+                    <button class="product-tab" data-tab="bestseller">Bán Chạy</button>
+                    <button class="product-tab" data-tab="sale">Giảm Giá</button>
                 </div>
             </div>
-
-            <div class="products-grid">
-                <!-- Product 1 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-bg">👗</div>
-                        <span class="product-badge new">Mới</span>
-                        <div class="product-actions">
-                            <button class="product-action-btn" title="Yêu thích">❤️</button>
-                            <button class="product-action-btn" title="Xem nhanh">👁️</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Đầm dự tiệc</span>
-                        <h3 class="product-name">Đầm Dạ Hội Luxury</h3>
-                        <div class="product-price">
-                            <span class="product-price-current">1.890.000đ</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="product-stars">⭐⭐⭐⭐⭐</span>
-                            <span class="product-reviews">(48 đánh giá)</span>
-                        </div>
-                        <button class="product-add-btn">Thêm vào giỏ</button>
-                    </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-bg">👔</div>
-                        <span class="product-badge hot">Hot</span>
-                        <div class="product-actions">
-                            <button class="product-action-btn" title="Yêu thích">❤️</button>
-                            <button class="product-action-btn" title="Xem nhanh">👁️</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Áo sơ mi</span>
-                        <h3 class="product-name">Áo Sơ Mi Premium</h3>
-                        <div class="product-price">
-                            <span class="product-price-current">890.000đ</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="product-stars">⭐⭐⭐⭐⭐</span>
-                            <span class="product-reviews">(125 đánh giá)</span>
-                        </div>
-                        <button class="product-add-btn">Thêm vào giỏ</button>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-bg">🧥</div>
-                        <span class="product-badge sale">-30%</span>
-                        <div class="product-actions">
-                            <button class="product-action-btn" title="Yêu thích">❤️</button>
-                            <button class="product-action-btn" title="Xem nhanh">👁️</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Áo khoác</span>
-                        <h3 class="product-name">Blazer Elegance</h3>
-                        <div class="product-price">
-                            <span class="product-price-current">1.390.000đ</span>
-                            <span class="product-price-old">1.990.000đ</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="product-stars">⭐⭐⭐⭐</span>
-                            <span class="product-reviews">(86 đánh giá)</span>
-                        </div>
-                        <button class="product-add-btn">Thêm vào giỏ</button>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-bg">👜</div>
-                        <div class="product-actions">
-                            <button class="product-action-btn" title="Yêu thích">❤️</button>
-                            <button class="product-action-btn" title="Xem nhanh">👁️</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Phụ kiện</span>
-                        <h3 class="product-name">Túi Xách Classic</h3>
-                        <div class="product-price">
-                            <span class="product-price-current">2.490.000đ</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="product-stars">⭐⭐⭐⭐⭐</span>
-                            <span class="product-reviews">(63 đánh giá)</span>
-                        </div>
-                        <button class="product-add-btn">Thêm vào giỏ</button>
-                    </div>
-                </div>
-
-                <!-- Product 5 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-bg">👖</div>
-                        <span class="product-badge new">Mới</span>
-                        <div class="product-actions">
-                            <button class="product-action-btn" title="Yêu thích">❤️</button>
-                            <button class="product-action-btn" title="Xem nhanh">👁️</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Quần</span>
-                        <h3 class="product-name">Quần Palazzo Silk</h3>
-                        <div class="product-price">
-                            <span class="product-price-current">1.190.000đ</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="product-stars">⭐⭐⭐⭐</span>
-                            <span class="product-reviews">(42 đánh giá)</span>
-                        </div>
-                        <button class="product-add-btn">Thêm vào giỏ</button>
-                    </div>
-                </div>
-
-                <!-- Product 6 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-bg">👠</div>
-                        <span class="product-badge hot">Hot</span>
-                        <div class="product-actions">
-                            <button class="product-action-btn" title="Yêu thích">❤️</button>
-                            <button class="product-action-btn" title="Xem nhanh">👁️</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Giày dép</span>
-                        <h3 class="product-name">Giày Cao Gót Velvet</h3>
-                        <div class="product-price">
-                            <span class="product-price-current">1.690.000đ</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="product-stars">⭐⭐⭐⭐⭐</span>
-                            <span class="product-reviews">(91 đánh giá)</span>
-                        </div>
-                        <button class="product-add-btn">Thêm vào giỏ</button>
-                    </div>
-                </div>
-
-                <!-- Product 7 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-bg">🧣</div>
-                        <span class="product-badge sale">-20%</span>
-                        <div class="product-actions">
-                            <button class="product-action-btn" title="Yêu thích">❤️</button>
-                            <button class="product-action-btn" title="Xem nhanh">👁️</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Phụ kiện</span>
-                        <h3 class="product-name">Khăn Lụa Họa Tiết</h3>
-                        <div class="product-price">
-                            <span class="product-price-current">490.000đ</span>
-                            <span class="product-price-old">590.000đ</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="product-stars">⭐⭐⭐⭐</span>
-                            <span class="product-reviews">(37 đánh giá)</span>
-                        </div>
-                        <button class="product-add-btn">Thêm vào giỏ</button>
-                    </div>
-                </div>
-
-                <!-- Product 8 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-bg">👕</div>
-                        <div class="product-actions">
-                            <button class="product-action-btn" title="Yêu thích">❤️</button>
-                            <button class="product-action-btn" title="Xem nhanh">👁️</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Áo thun</span>
-                        <h3 class="product-name">T-Shirt Minimalist</h3>
-                        <div class="product-price">
-                            <span class="product-price-current">390.000đ</span>
-                        </div>
-                        <div class="product-rating">
-                            <span class="product-stars">⭐⭐⭐⭐⭐</span>
-                            <span class="product-reviews">(156 đánh giá)</span>
-                        </div>
-                        <button class="product-add-btn">Thêm vào giỏ</button>
-                    </div>
-                </div>
+            <div class="products-grid" id="productsGrid">
+                <div class="loading">Đang tải sản phẩm...</div>
             </div>
-
             <div class="text-center" style="margin-top: var(--space-2xl);">
                 <a href="#" class="btn btn-outline">Xem Tất Cả Sản Phẩm</a>
             </div>
         </div>
     </section>
 
-    <!-- ==================== PROMOTION BANNER ==================== -->
     <section class="promo-banner section">
         <div class="container">
             <div class="promo-content">
-                <span class="promo-label">
-                    🔥 Flash Sale
-                </span>
+                <span class="promo-label">🔥 Flash Sale</span>
                 <h2 class="promo-title">
                     Siêu Sale <br>
                     <span class="promo-discount">Giảm 50%</span>
                 </h2>
-                <p class="promo-description">
-                    Ưu đãi đặc biệt cho bộ sưu tập Xuân - Hè. Số lượng có hạn!
-                </p>
+                <p class="promo-description">Ưu đãi đặc biệt cho bộ sưu tập Xuân - Hè. Số lượng có hạn!</p>
                 <div class="promo-timer">
                     <div class="timer-box">
                         <div class="timer-number" id="days">07</div>
@@ -499,93 +258,72 @@
                 <a href="#" class="btn btn-accent">Mua Ngay</a>
             </div>
             <div class="promo-visual">
-                <div class="promo-image">🛍️</div>
+                <div class="promo-image"><img src="assets/icons/promo.jpg" alt="promo-image"></div>
             </div>
         </div>
     </section>
 
-    <!-- ==================== NEW ARRIVALS ==================== -->
     <section class="new-arrivals section">
         <div class="container">
             <h2 class="section-title">Hàng Mới <span class="text-accent">Về</span></h2>
             <p class="section-subtitle">Cập nhật những xu hướng thời trang mới nhất</p>
 
             <div class="arrivals-grid">
-                <!-- Arrival 1 -->
                 <div class="arrival-card">
                     <div class="arrival-bg"></div>
-                    <span class="arrival-icon">👗</span>
+                    <span class="arrival-icon"><img src="assets/icons/fas54091.png" alt="ao-so-mi"></span>
                     <div class="arrival-content">
-                        <h3 class="arrival-title">Váy Maxi Bohemian</h3>
-                        <p class="arrival-price">1.590.000đ</p>
-                        <a href="#" class="arrival-link">
-                            Xem chi tiết
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14m-7-7 7 7-7 7" />
-                            </svg>
-                        </a>
+                        <h3 class="arrival-title">Áo sơ mi công sở</h3>
+                        <p class="arrival-price">688,000đ</p>
+                        <a href="#" class="arrival-link">Xem chi tiết →</a>
                     </div>
                 </div>
-
-                <!-- Arrival 2 -->
                 <div class="arrival-card">
                     <div class="arrival-bg"></div>
-                    <span class="arrival-icon">👔</span>
+                    <span class="arrival-icon"><img src="assets/icons/123-removebg-preview.png" alt="ao-so-mi"></span>
                     <div class="arrival-content">
-                        <h3 class="arrival-title">Set Vest Nam</h3>
-                        <p class="arrival-price">3.290.000đ</p>
-                        <a href="#" class="arrival-link">
-                            Xem chi tiết
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14m-7-7 7 7-7 7" />
-                            </svg>
-                        </a>
+                        <h3 class="arrival-title">Áo Thun T-shirt</h3>
+                        <p class="arrival-price">110,000đ</p>
+                        <a href="#" class="arrival-link">Xem chi tiết →</a>
                     </div>
                 </div>
-
-                <!-- Arrival 3 -->
                 <div class="arrival-card">
                     <div class="arrival-bg"></div>
-                    <span class="arrival-icon">👟</span>
+                    <span class="arrival-icon"><img src="assets/icons/tui-removebg-preview.png" alt="ao-so-mi"></span>
                     <div class="arrival-content">
-                        <h3 class="arrival-title">Sneakers Limited</h3>
-                        <p class="arrival-price">2.190.000đ</p>
-                        <a href="#" class="arrival-link">
-                            Xem chi tiết
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14m-7-7 7 7-7 7" />
-                            </svg>
-                        </a>
+                        <h3 class="arrival-title">TDV Quai Dài Terra</h3>
+                        <p class="arrival-price">1,080,000đ</p>
+                        <a href="#" class="arrival-link">Xem chi tiết →</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==================== FEATURES SECTION ==================== -->
     <section class="features">
         <div class="container">
             <div class="features-grid">
                 <div class="feature-item">
-                    <div class="feature-icon">🚚</div>
+                    <img class="feature-icon" src="assets/icons/delivery-truck.png" alt="Vận chuyển"
+                        style="width:48px;height:48px">
                     <h4 class="feature-title">Miễn Phí Vận Chuyển</h4>
                     <p class="feature-text">Cho đơn hàng từ 500.000đ</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">🔄</div>
+                    <img class="feature-icon" src="assets/icons/return.png" alt="Đổi trả"
+                        style="width:48px;height:48px">
                     <h4 class="feature-title">Đổi Trả Dễ Dàng</h4>
                     <p class="feature-text">Trong vòng 30 ngày</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">💳</div>
+                    <img class="feature-icon" src="assets/icons/credit-card.png" alt="Thanh toán"
+                        style="width:48px;height:48px">
                     <h4 class="feature-title">Thanh Toán An Toàn</h4>
                     <p class="feature-text">Bảo mật 100%</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">🎧</div>
+                    <img class="feature-icon" src="assets/icons/headphones.png" alt="Hỗ trợ"
+                        style="width:48px;height:48px">
                     <h4 class="feature-title">Hỗ Trợ 24/7</h4>
                     <p class="feature-text">Tư vấn tận tình</p>
                 </div>
@@ -593,14 +331,12 @@
         </div>
     </section>
 
-    <!-- ==================== NEWSLETTER SECTION ==================== -->
     <section class="newsletter section">
         <div class="container">
-            <div class="newsletter-icon">💌</div>
+            <div class="newsletter-icon"><img src="assets/icons/heart.png" alt="Heart" style="width:68px;height:68px">
+            </div>
             <h2 class="newsletter-title">Đăng Ký Nhận Tin</h2>
-            <p class="newsletter-text">
-                Đăng ký để nhận thông tin về ưu đãi độc quyền và bộ sưu tập mới nhất
-            </p>
+            <p class="newsletter-text">Đăng ký để nhận thông tin về ưu đãi độc quyền</p>
             <form class="newsletter-form">
                 <input type="email" class="newsletter-input" placeholder="Nhập email của bạn...">
                 <button type="submit" class="newsletter-btn">Đăng Ký</button>
@@ -608,30 +344,30 @@
         </div>
     </section>
 
-    <!-- ==================== FOOTER ==================== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-main">
-                <!-- Brand -->
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <div class="footer-logo-icon">✨</div>
+                        <div class="footer-logo-icon"><img src="assets/icons/logo.jpg" alt="logo"
+                                style="width:30px;height:30px;border-radius:6px;"></div>
                         LUXE Fashion
                     </div>
                     <p class="footer-description">
                         LUXE Fashion - Thương hiệu thời trang cao cấp hàng đầu Việt Nam.
-                        Chúng tôi mang đến những thiết kế tinh tế, chất liệu sang trọng
-                        và trải nghiệm mua sắm tuyệt vời nhất.
                     </p>
                     <div class="footer-social">
-                        <a href="#" class="social-link">📘</a>
-                        <a href="#" class="social-link">📸</a>
-                        <a href="#" class="social-link">🐦</a>
-                        <a href="#" class="social-link">📺</a>
+                        <a href="#" class="social-link"><img src="assets/icons/instagram.png" alt="Instagram"
+                                style="width:28px;height:28px"></a>
+                        <a href="#" class="social-link"><img src="assets/icons/facebook.png" alt="Facebook"
+                                style="width:28px;height:28px"></a>
+                        <a href="#" class="social-link"><img src="assets/icons/tiktok.png" alt="TikTok"
+                                style="width:28px;height:28px"></a>
+                        <a href="#" class="social-link"><img src="assets/icons/youtube.png" alt="YouTube"
+                                style="width:28px;height:28px"></a>
                     </div>
                 </div>
 
-                <!-- Quick Links -->
                 <div class="footer-column">
                     <h4 class="footer-title">Liên Kết Nhanh</h4>
                     <ul class="footer-links">
@@ -639,59 +375,34 @@
                         <li><a href="#" class="footer-link">Cửa Hàng</a></li>
                         <li><a href="#" class="footer-link">Bộ Sưu Tập</a></li>
                         <li><a href="#" class="footer-link">Tin Tức</a></li>
-                        <li><a href="#" class="footer-link">Liên Hệ</a></li>
                     </ul>
                 </div>
 
-                <!-- Customer Service -->
                 <div class="footer-column">
-                    <h4 class="footer-title">Hỗ Trợ Khách Hàng</h4>
+                    <h4 class="footer-title">Hỗ Trợ</h4>
                     <ul class="footer-links">
                         <li><a href="#" class="footer-link">Hướng Dẫn Mua Hàng</a></li>
                         <li><a href="#" class="footer-link">Chính Sách Đổi Trả</a></li>
-                        <li><a href="#" class="footer-link">Phương Thức Thanh Toán</a></li>
+                        <li><a href="#" class="footer-link">Thanh Toán</a></li>
                         <li><a href="#" class="footer-link">Vận Chuyển</a></li>
-                        <li><a href="#" class="footer-link">Câu Hỏi Thường Gặp</a></li>
                     </ul>
                 </div>
 
-                <!-- Contact -->
                 <div class="footer-column">
                     <h4 class="footer-title">Liên Hệ</h4>
                     <div class="footer-contact">
-                        <div class="footer-contact-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                <circle cx="12" cy="10" r="3" />
-                            </svg>
-                            <span>123 Nguyễn Huệ, Q.1, TP.HCM</span>
-                        </div>
-                        <div class="footer-contact-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path
-                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                            </svg>
-                            <span>1900 xxxx</span>
-                        </div>
-                        <div class="footer-contact-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                <polyline points="22,6 12,13 2,6" />
-                            </svg>
-                            <span>support@luxefashion.vn</span>
-                        </div>
+                        <div class="footer-contact-item"><img src="assets/icons/placeholder.png" alt="Location"
+                                style="width:28px;height:28px">123 Nguyễn Huệ, Q.1, TP.HCM</div>
+                        <div class="footer-contact-item"><img src="assets/icons/phone-call.png" alt="Phone"
+                                style="width:28px;height:28px">1900 xxxx</div>
+                        <div class="footer-contact-item"><img src="assets/icons/gmail.png" alt="Email"
+                                style="width:28px;height:28px">support@luxefashion.vn</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Footer Bottom -->
             <div class="footer-bottom">
-                <p class="footer-copyright">
-                    © 2025 LUXE Fashion. Thiết kế với ❤️
-                </p>
+                <p class="footer-copyright">© 2025 LUXE Fashion. Thiết kế với ❤️</p>
                 <div class="footer-payments">
                     <div class="payment-icon">VISA</div>
                     <div class="payment-icon">MC</div>
@@ -702,123 +413,14 @@
         </div>
     </footer>
 
-    <!-- ==================== BACK TO TOP ==================== -->
     <button class="back-to-top" id="backToTop" title="Lên đầu trang">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 15l-6-6-6 6" />
         </svg>
     </button>
 
-    <!-- ==================== JAVASCRIPT ==================== -->
-    <!-- Main Application JS -->
+    <script src="assets/js/modules/auth.js"></script>
     <script src="assets/js/app.js"></script>
-    <script>
-        // ===== Header Scroll Effect =====
-        const header = document.getElementById('header');
-        let lastScroll = 0;
-
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-
-            lastScroll = currentScroll;
-        });
-
-        // ===== Back to Top Button =====
-        const backToTop = document.getElementById('backToTop');
-
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 500) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        });
-
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // ===== Countdown Timer =====
-        function updateCountdown() {
-            // Set end date (7 days from now for demo)
-            const endDate = new Date();
-            endDate.setDate(endDate.getDate() + 7);
-
-            const now = new Date();
-            const diff = endDate - now;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-        }
-
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-
-        // ===== Product Tabs =====
-        const productTabs = document.querySelectorAll('.product-tab');
-
-        productTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                productTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-            });
-        });
-
-        // ===== Scroll Reveal Animation =====
-        const revealElements = document.querySelectorAll('.section');
-
-        const revealOnScroll = () => {
-            revealElements.forEach(el => {
-                const elementTop = el.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-
-                if (elementTop < windowHeight - 100) {
-                    el.classList.add('reveal', 'active');
-                }
-            });
-        };
-
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll(); // Initial check
-
-        // ===== Newsletter Form =====
-        const newsletterForm = document.querySelector('.newsletter-form');
-
-        newsletterForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = newsletterForm.querySelector('input').value;
-
-            if (email) {
-                alert('Cảm ơn bạn đã đăng ký! 💌');
-                newsletterForm.reset();
-            }
-        });
-
-        // ===== Mobile Menu Toggle =====
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.querySelector('.nav-menu');
-
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            menuToggle.classList.toggle('active');
-        });
-    </script>
 </body>
 
 </html>

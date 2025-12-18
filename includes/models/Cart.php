@@ -159,7 +159,7 @@ class Cart
     {
         $sql = "SELECT ci.*, p.name, p.slug, p.price as original_price, p.sale_price,
                        pv.size, pv.color, pv.color_code,
-                       (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image
+                       COALESCE(p.image, (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1)) as image
                 FROM cart_items ci
                 JOIN products p ON ci.product_id = p.id
                 LEFT JOIN product_variants pv ON ci.variant_id = pv.id

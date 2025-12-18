@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm | LUXE Fashion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/products.css">
+    <link rel="stylesheet" href="assets/css/footer.css">
+    <link rel="stylesheet" href="assets/css/modal.css">
+    <style>
+        .page-header {
+            padding: 180px 0 60px;
+            background: linear-gradient(135deg, #fdf6f0 0%, #f8ece3 100%);
+        }
+
+        .page-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--secondary);
+        }
+
+        .products-page {
+            padding: 40px 0 80px;
+        }
+
+        .products-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+        }
+
+        .filters-sidebar {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 140px;
+            overflow: hidden;
+        }
+
+        .filter-section {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .filter-section:last-child {
+            border-bottom: none;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background: linear-gradient(135deg, #b76e79 0%, #d4a373 100%);
+            border-radius: 2px;
+            margin-right: 10px;
+        }
+
+        .filter-title button {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            background: rgba(183, 110, 121, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            transition: all var(--transition);
+        }
+
+        .filter-title button:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .filter-category {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all var(--transition);
+            font-size: 0.95rem;
+            color: #555;
+            border: none;
+        }
+
+        .filter-category:hover {
+            background: #f8f4f5;
+            color: var(--secondary);
+            padding-left: 20px;
+        }
+
+        .filter-category.active {
+            background: linear-gradient(135deg, rgba(183, 110, 121, 0.15) 0%, rgba(212, 163, 115, 0.1) 100%);
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .price-range {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .price-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: all var(--transition);
+        }
+
+        .price-input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.1);
+        }
+
+        .price-input::placeholder {
+            color: #aaa;
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .filter-checkbox input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--secondary);
+            cursor: pointer;
+        }
+
+        .filter-checkbox span {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .filter-colors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all var(--transition);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-option:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-option.active {
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .filter-sizes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .size-option {
+            min-width: 44px;
+            padding: 10px 16px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            transition: all var(--transition);
+            background: #fafafa;
+        }
+
+        .size-option:hover {
+            border-color: var(--secondary);
+            background: #fff;
+        }
+
+        .size-option.active {
+            background: linear-gradient(135deg, #b76e79 0%, #d4a373 100%);
+            color: var(--white);
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(183, 110, 121, 0.3);
+        }
+
+        .apply-filter {
+            width: calc(100% - 48px);
+            margin: 20px 24px;
+            padding: 14px;
+            background: linear-gradient(135deg, #b76e79 0%, #d4a373 100%);
+            color: var(--white);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all var(--transition);
+            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.3);
+        }
+
+        .apply-filter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(183, 110, 121, 0.4);
+        }
+
+        .products-main {}
+
+        .products-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .products-count {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .products-count strong {
+            color: var(--primary);
+        }
+
+        .products-sort select {
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 40px;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 1200px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .products-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <header class="header" id="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-left">
+                    <span>📞 Hotline: 1900 xxxx</span>
+                </div>
+                <div class="header-top-right">
+                    <a href="#">Hỗ trợ</a>
+                </div>
+            </div>
+        </div> -->
+    <div class="header-main">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><img src="assets/icons/logo.jpg" alt="logo-icon"></div>
+                LUXE
+            </a>
+            <nav class="nav">
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Trang Chủ</a></li>
+                    <li><a href="products.html?category=nam" class="nav-link" data-cat="nam">Thời Trang Nam</a></li>
+                    <li><a href="products.html?category=nu" class="nav-link" data-cat="nu">Thời Trang Nữ</a></li>
+                    <li><a href="products.html?category=phu-kien" class="nav-link" data-cat="phu-kien">Phụ Kiện</a>
+                    </li>
+                    <li><a href="products.html" class="nav-link">Bộ Sưu Tập</a></li>
+                    <li><a href="products.html?sale=1" class="nav-link" data-sale="1">Sale</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="header-search">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm..." id="searchInput">
+                    <button type="button" id="searchBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <button class="header-icon" title="Tài khoản" onclick="AuthManager.showLogin()">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <a href="cart.html" class="header-icon" title="Giỏ hàng">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <div>
+                <h1 class="page-title" id="pageTitle">Tất Cả Sản Phẩm</h1>
+                <div class="breadcrumb">
+                    <a href="index.html">Trang chủ</a>
+                    <span>/</span>
+                    <span id="breadcrumbCurrent">Sản phẩm</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-page">
+        <div class="container">
+            <div class="products-layout">
+                <aside class="filters-sidebar">
+                    <div class="filter-section">
+                        <h4 class="filter-title">Danh Mục</h4>
+                        <a href="products.html" class="filter-category" data-cat="">Tất cả</a>
+                        <a href="products.html?category=nam" class="filter-category" data-cat="nam">Thời Trang Nam</a>
+                        <a href="products.html?category=nu" class="filter-category" data-cat="nu">Thời Trang Nữ</a>
+                        <a href="products.html?category=phu-kien" class="filter-category" data-cat="phu-kien">Phụ
+                            Kiện</a>
+                    </div>
+
+                    <div class="filter-section">
+                        <h4 class="filter-title">Khoảng Giá</h4>
+                        <div class="price-range">
+                            <input type="number" class="price-input" placeholder="Từ" id="priceMin">
+                            <span>-</span>
+                            <input type="number" class="price-input" placeholder="Đến" id="priceMax">
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h4 class="filter-title">Màu Sắc</h4>
+                        <div class="filter-colors">
+                            <button class="color-option" style="background:#1a1a1a" data-color="black"></button>
+                            <button class="color-option" style="background:#ffffff; border:1px solid #ddd"
+                                data-color="white"></button>
+                            <button class="color-option" style="background:#b76e79" data-color="pink"></button>
+                            <button class="color-option" style="background:#4a5568" data-color="gray"></button>
+                            <button class="color-option" style="background:#2563eb" data-color="blue"></button>
+                            <button class="color-option" style="background:#dc2626" data-color="red"></button>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h4 class="filter-title">Kích Thước</h4>
+                        <div class="filter-sizes">
+                            <button class="size-option" data-size="S">S</button>
+                            <button class="size-option" data-size="M">M</button>
+                            <button class="size-option" data-size="L">L</button>
+                            <button class="size-option" data-size="XL">XL</button>
+                            <button class="size-option" data-size="XXL">XXL</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="filterSale">
+                            <span>Đang giảm giá</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="filterNew">
+                            <span>Hàng mới về</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="filterBestseller">
+                            <span>Bán chạy</span>
+                        </label>
+                    </div>
+
+                    <button class="apply-filter" id="applyFilter">Áp Dụng Bộ Lọc</button>
+                </aside>
+
+                <main class="products-main">
+                    <div class="products-toolbar">
+                        <div class="products-count">
+                            Hiển thị <strong id="showingCount">0</strong> sản phẩm
+                        </div>
+                        <div class="products-sort">
+                            <select id="sortSelect">
+                                <option value="newest">Mới nhất</option>
+                                <option value="price_asc">Giá: Thấp → Cao</option>
+                                <option value="price_desc">Giá: Cao → Thấp</option>
+                                <option value="bestseller">Bán chạy nhất</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="products-grid" id="productsGrid">
+                        <div class="loading">Đang tải sản phẩm...</div>
+                    </div>
+
+                    <div class="pagination" id="pagination"></div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border-top:none; padding-top:0;">
+                <p class="footer-copyright">© 2025 LUXE Fashion</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/modules/auth.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        let currentPage = 1;
+        let currentFilters = {};
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            Toast.init();
+            await CartManager.init();
+
+            parseUrl();
+            loadProducts();
+            bindEvents();
+        });
+
+        function parseUrl() {
+            const params = new URLSearchParams(window.location.search);
+            currentFilters.category = params.get('category') || '';
+            currentFilters.sale = params.get('sale') || '';
+            currentFilters.search = params.get('q') || '';
+
+            const titles = {
+                'nam': 'Thời Trang Nam',
+                'nu': 'Thời Trang Nữ',
+                'phu-kien': 'Phụ Kiện'
+            };
+
+            if (currentFilters.category && titles[currentFilters.category]) {
+                document.getElementById('pageTitle').textContent = titles[currentFilters.category];
+                document.getElementById('breadcrumbCurrent').textContent = titles[currentFilters.category];
+            } else if (currentFilters.sale) {
+                document.getElementById('pageTitle').textContent = 'Sản Phẩm Giảm Giá';
+                document.getElementById('breadcrumbCurrent').textContent = 'Sale';
+                document.getElementById('filterSale').checked = true;
+            } else if (currentFilters.search) {
+                document.getElementById('pageTitle').textContent = `Kết quả: "${currentFilters.search}"`;
+                document.getElementById('breadcrumbCurrent').textContent = 'Tìm kiếm';
+            }
+
+            document.querySelectorAll('.filter-category').forEach(el => {
+                if (el.dataset.cat === currentFilters.category) {
+                    el.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(el => {
+                if (el.dataset.cat === currentFilters.category ||
+                    (el.dataset.sale && currentFilters.sale)) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        async function loadProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '<div class="loading">Đang tải sản phẩm...</div>';
+
+            try {
+                let url = `./api/index.php?action=products&page=${currentPage}`;
+                if (currentFilters.category) url += `&category=${currentFilters.category}`;
+                if (currentFilters.sale) url += `&on_sale=1`;
+                if (currentFilters.search) url += `&search=${encodeURIComponent(currentFilters.search)}`;
+                if (currentFilters.sort) url += `&sort=${currentFilters.sort}`;
+                if (currentFilters.min_price) url += `&min_price=${currentFilters.min_price}`;
+                if (currentFilters.max_price) url += `&max_price=${currentFilters.max_price}`;
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success && data.data && data.data.data) {
+                    renderProducts(data.data.data);
+                    document.getElementById('showingCount').textContent = data.data.data.length;
+                    renderPagination(data.data.page, data.data.total_pages);
+                } else {
+                    grid.innerHTML = '<div class="no-products">Không tìm thấy sản phẩm</div>';
+                }
+            } catch (error) {
+                grid.innerHTML = '<div class="error">Có lỗi xảy ra khi tải sản phẩm</div>';
+            }
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('productsGrid');
+
+            if (!products || products.length === 0) {
+                grid.innerHTML = '<div class="no-products">Không tìm thấy sản phẩm</div>';
+                return;
+            }
+
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" data-product-id="${product.id}">
+                    <div class="product-image">
+                        <div class="product-image-bg">
+                            ${product.image ? `<img src="${product.image}" alt="${product.name}">` : '👗'}
+                        </div>
+                        ${product.is_new ? '<span class="product-badge new">Mới</span>' : ''}
+                        ${product.sale_price ? '<span class="product-badge sale">Sale</span>' : ''}
+                        <div class="product-actions">
+                            <button class="product-action-btn" title="Yêu thích">❤️</button>
+                            <button class="product-action-btn" title="Xem nhanh" onclick="quickView(${product.id})">👁️</button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">${product.category_name || ''}</span>
+                        <h3 class="product-name">
+                            <a href="product.php?slug=${product.slug}">${product.name}</a>
+                        </h3>
+                        <div class="product-price">
+                            <span class="product-price-current">${Utils.formatPrice(product.sale_price || product.price)}</span>
+                            ${product.sale_price ? `<span class="product-price-old">${Utils.formatPrice(product.price)}</span>` : ''}
+                        </div>
+                        <button class="product-add-btn" onclick="addToCart(${product.id})">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPagination(current, total) {
+            const container = document.getElementById('pagination');
+            if (total <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            for (let i = 1; i <= total; i++) {
+                html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            loadProducts();
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+
+        async function addToCart(productId) {
+            await CartManager.add(productId, 1);
+        }
+
+        function quickView(productId) {
+            Toast.info('Đang tải...');
+        }
+
+        function bindEvents() {
+            document.getElementById('sortSelect').addEventListener('change', (e) => {
+                currentFilters.sort = e.target.value;
+                loadProducts();
+            });
+
+            document.getElementById('applyFilter').addEventListener('click', () => {
+                currentFilters.min_price = document.getElementById('priceMin').value;
+                currentFilters.max_price = document.getElementById('priceMax').value;
+                currentFilters.sale = document.getElementById('filterSale').checked ? '1' : '';
+                currentPage = 1;
+                loadProducts();
+            });
+
+            document.getElementById('searchBtn').addEventListener('click', () => {
+                const q = document.getElementById('searchInput').value.trim();
+                if (q) window.location.href = `products.html?q=${encodeURIComponent(q)}`;
+            });
+
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const q = e.target.value.trim();
+                    if (q) window.location.href = `products.html?q=${encodeURIComponent(q)}`;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

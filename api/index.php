@@ -318,6 +318,309 @@ try {
             jsonResponse(['success' => true, 'data' => $settings]);
             break;
 
+
+        case 'auth.register':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            
+            $input = getJsonInput();
+            $required = ['email', 'password', 'full_name'];
+            foreach ($required as $field) {
+                if (empty($input[$field])) {
+                    errorResponse("Vui lòng nhập {$field}");
+                }
+            }
+            
+            require_once INCLUDES_PATH . 'models/User.php';
+            $user = new User();
+            jsonResponse($user->register($input));
+            break;
+
+        case 'auth.login':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            
+            $input = getJsonInput();
+            if (empty($input['email']) || empty($input['password'])) {
+                errorResponse('Vui lòng nhập email và mật khẩu');
+            }
+            
+            require_once INCLUDES_PATH . 'models/User.php';
+            $user = new User();
+            jsonResponse($user->login($input['email'], $input['password'], $input['remember'] ?? false));
+            break;
+
+        case 'auth.logout':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            
+            require_once INCLUDES_PATH . 'models/User.php';
+            $user = new User();
+            $user->logout();
+            jsonResponse(['success' => true, 'message' => 'Đăng xuất thành công']);
+            break;
+
+        case 'user.profile':
+            if (!isset($_SESSION['user_id'])) {
+                errorResponse('Chưa đăng nhập', 401);
+            }
+            
+            require_once INCLUDES_PATH . 'models/User.php';
+            $user = new User();
+            
+            if ($method === 'GET') {
+                $profile = $user->getById($_SESSION['user_id']);
+                jsonResponse(['success' => true, 'data' => $profile]);
+            } elseif ($method === 'POST' || $method === 'PUT') {
+                $input = getJsonInput();
+                jsonResponse($user->update($_SESSION['user_id'], $input));
+            } else {
+                errorResponse('Method not allowed', 405);
+            }
+            break;
+
+        case 'user.password':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) {
+                errorResponse('Chưa đăng nhập', 401);
+            }
+            
+            $input = getJsonInput();
+            if (empty($input['current_password']) || empty($input['new_password'])) {
+                errorResponse('Vui lòng nhập đầy đủ thông tin');
+            }
+            
+            require_once INCLUDES_PATH . 'models/User.php';
+            $user = new User();
+            jsonResponse($user->changePassword($_SESSION['user_id'], $input['current_password'], $input['new_password']));
+            break;
+
+        case 'user.addresses':
+            if (!isset($_SESSION['user_id'])) {
+                errorResponse('Chưa đăng nhập', 401);
+            }
+            
+            require_once INCLUDES_PATH . 'models/User.php';
+            $user = new User();
+            
+            if ($method === 'GET') {
+                $addresses = $user->getAddresses($_SESSION['user_id']);
+                jsonResponse(['success' => true, 'data' => $addresses]);
+            } elseif ($method === 'POST') {
+                $input = getJsonInput();
+                jsonResponse($user->addAddress($_SESSION['user_id'], $input));
+            } else {
+                errorResponse('Method not allowed', 405);
+            }
+            break;
+
+        case 'user.wishlist':
+            if (!isset($_SESSION['user_id'])) {
+                errorResponse('Chưa đăng nhập', 401);
+            }
+            
+            require_once INCLUDES_PATH . 'models/User.php';
+            $user = new User();
+            
+            if ($method === 'GET') {
+                $wishlist = $user->getWishlist($_SESSION['user_id']);
+                jsonResponse(['success' => true, 'data' => $wishlist]);
+            } elseif ($method === 'POST') {
+                $input = getJsonInput();
+                if (empty($input['product_id'])) {
+                    errorResponse('Product ID required');
+                }
+                jsonResponse($user->addToWishlist($_SESSION['user_id'], (int)$input['product_id']));
+            } elseif ($method === 'DELETE') {
+                $productId = (int)($_GET['product_id'] ?? 0);
+                if (!$productId) {
+                    errorResponse('Product ID required');
+                }
+                jsonResponse($user->removeFromWishlist($_SESSION['user_id'], $productId));
+            } else {
+                errorResponse('Method not allowed', 405);
+            }
+            break;
+
+        case 'orders.create':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            
+            $input = getJsonInput();
+            $required = ['customer_name', 'customer_email', 'customer_phone', 'shipping_address'];
+            foreach ($required as $field) {
+                if (empty($input[$field])) {
+                    errorResponse("Vui lòng nhập {$field}");
+                }
+            }
+            
+            require_once INCLUDES_PATH . 'models/Order.php';
+            $order = new Order();
+            jsonResponse($order->create($input));
+            break;
+
+        case 'orders.list':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) {
+                errorResponse('Chưa đăng nhập', 401);
+            }
+            
+            require_once INCLUDES_PATH . 'models/Order.php';
+            $order = new Order();
+            $page = (int)($_GET['page'] ?? 1);
+            jsonResponse(['success' => true, 'data' => $order->getByUser($_SESSION['user_id'], $page)]);
+            break;
+
+        case 'orders.detail':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            
+            $orderId = (int)($_GET['id'] ?? 0);
+            $orderCode = $_GET['code'] ?? '';
+            
+            if (!$orderId && !$orderCode) {
+                errorResponse('Order ID hoặc code required');
+            }
+            
+            require_once INCLUDES_PATH . 'models/Order.php';
+            $order = new Order();
+            $result = $orderId ? $order->getById($orderId) : $order->getByCode($orderCode);
+            
+            if (!$result) {
+                errorResponse('Không tìm thấy đơn hàng', 404);
+            }
+            
+            if (isset($_SESSION['user_id']) && $result['user_id'] != $_SESSION['user_id']) {
+                errorResponse('Không có quyền xem đơn hàng này', 403);
+            }
+            
+            jsonResponse(['success' => true, 'data' => $result]);
+            break;
+
+        case 'orders.cancel':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) {
+                errorResponse('Chưa đăng nhập', 401);
+            }
+            
+            $input = getJsonInput();
+            $orderId = (int)($input['order_id'] ?? 0);
+            
+            if (!$orderId) {
+                errorResponse('Order ID required');
+            }
+            
+            require_once INCLUDES_PATH . 'models/Order.php';
+            $order = new Order();
+            jsonResponse($order->cancel($orderId, $_SESSION['user_id']));
+            break;
+
+        case 'orders.track':
+            if ($method !== 'POST' && $method !== 'GET') errorResponse('Method not allowed', 405);
+            
+            $orderCode = $_GET['code'] ?? '';
+            $contact = $_GET['contact'] ?? '';
+            
+            if ($method === 'POST') {
+                $input = getJsonInput();
+                $orderCode = $input['order_code'] ?? '';
+                $contact = $input['contact'] ?? '';
+            }
+            
+            if (!$orderCode || !$contact) {
+                errorResponse('Vui lòng nhập mã đơn hàng và email/số điện thoại');
+            }
+            
+            require_once INCLUDES_PATH . 'models/Order.php';
+            $order = new Order();
+            $result = $order->track($orderCode, $contact);
+            
+            if (!$result) {
+                errorResponse('Không tìm thấy đơn hàng', 404);
+            }
+            
+            jsonResponse(['success' => true, 'data' => $result]);
+            break;
+
+        // ==================== ADMIN ====================
+        case 'admin.products.create':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            // Check admin role
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            if (empty($input['name']) || empty($input['price'])) {
+                errorResponse('Tên và giá sản phẩm là bắt buộc');
+            }
+            
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['name'])));
+            $sql = "INSERT INTO products (name, slug, price, sale_price, category_id, stock_quantity, image, description, status, is_featured, created_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            $db->query($sql, [
+                $input['name'],
+                $slug,
+                $input['price'],
+                $input['sale_price'] ?? null,
+                $input['category_id'] ?? null,
+                $input['stock_quantity'] ?? 0,
+                $input['image'] ?? null,
+                $input['description'] ?? null,
+                $input['status'] ?? 'active',
+                $input['is_featured'] ?? 0
+            ]);
+            
+            jsonResponse(['success' => true, 'message' => 'Thêm sản phẩm thành công', 'id' => $db->lastInsertId()]);
+            break;
+
+        case 'admin.products.update':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            if (empty($input['id'])) errorResponse('ID sản phẩm là bắt buộc');
+            
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['name'])));
+            $sql = "UPDATE products SET name = ?, slug = ?, price = ?, sale_price = ?, category_id = ?, 
+                    stock_quantity = ?, image = ?, description = ?, status = ?, is_featured = ?, updated_at = NOW() WHERE id = ?";
+            $db->query($sql, [
+                $input['name'],
+                $slug,
+                $input['price'],
+                $input['sale_price'] ?? null,
+                $input['category_id'] ?? null,
+                $input['stock_quantity'] ?? 0,
+                $input['image'] ?? null,
+                $input['description'] ?? null,
+                $input['status'] ?? 'active',
+                $input['is_featured'] ?? 0,
+                $input['id']
+            ]);
+            
+            jsonResponse(['success' => true, 'message' => 'Cập nhật sản phẩm thành công']);
+            break;
+
+        case 'admin.products.delete':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            if (empty($input['id'])) errorResponse('ID sản phẩm là bắt buộc');
+            
+            // Delete related records first
+            $db->query("DELETE FROM product_images WHERE product_id = ?", [$input['id']]);
+            $db->query("DELETE FROM product_variants WHERE product_id = ?", [$input['id']]);
+            $db->query("DELETE FROM products WHERE id = ?", [$input['id']]);
+            
+            jsonResponse(['success' => true, 'message' => 'Xóa sản phẩm thành công']);
+            break;
+
         default:
             errorResponse('Invalid action', 400);
     }
