@@ -1,15 +1,8 @@
--- ========================================
--- LUXE FASHION - Database Schema
--- MySQL Database Structure
--- ========================================
-
 -- Create database
 CREATE DATABASE IF NOT EXISTS luxe_fashion CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE luxe_fashion;
 
--- ========================================
 -- USERS TABLE
--- ========================================
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -27,9 +20,6 @@ CREATE TABLE users (
     INDEX idx_status (status)
 ) ENGINE=InnoDB;
 
--- ========================================
--- CATEGORIES TABLE
--- ========================================
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -46,9 +36,7 @@ CREATE TABLE categories (
     INDEX idx_parent (parent_id)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- PRODUCTS TABLE
--- ========================================
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
@@ -81,9 +69,7 @@ CREATE TABLE products (
     FULLTEXT INDEX ft_search (name, description)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- PRODUCT IMAGES TABLE
--- ========================================
 CREATE TABLE product_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
@@ -95,10 +81,9 @@ CREATE TABLE product_images (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
     INDEX idx_product (product_id)
 ) ENGINE=InnoDB;
-
--- ========================================
+ 
 -- PRODUCT VARIANTS TABLE (Size, Color)
--- ========================================
+
 CREATE TABLE product_variants (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
@@ -113,9 +98,7 @@ CREATE TABLE product_variants (
     INDEX idx_product (product_id)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- USER ADDRESSES TABLE
--- ========================================
 CREATE TABLE user_addresses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -132,9 +115,7 @@ CREATE TABLE user_addresses (
     INDEX idx_user (user_id)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- CARTS TABLE
--- ========================================
 CREATE TABLE carts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT DEFAULT NULL,
@@ -146,9 +127,7 @@ CREATE TABLE carts (
     INDEX idx_session (session_id)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- CART ITEMS TABLE
--- ========================================
 CREATE TABLE cart_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cart_id INT NOT NULL,
@@ -164,9 +143,7 @@ CREATE TABLE cart_items (
     INDEX idx_cart (cart_id)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- ORDERS TABLE
--- ========================================
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT DEFAULT NULL,
@@ -195,9 +172,7 @@ CREATE TABLE orders (
     INDEX idx_payment (payment_status)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- ORDER ITEMS TABLE
--- ========================================
 CREATE TABLE order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
@@ -214,9 +189,7 @@ CREATE TABLE order_items (
     INDEX idx_order (order_id)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- COUPONS TABLE
--- ========================================
 CREATE TABLE coupons (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(50) NOT NULL UNIQUE,
@@ -235,9 +208,7 @@ CREATE TABLE coupons (
     INDEX idx_active (is_active)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- PRODUCT REVIEWS TABLE
--- ========================================
 CREATE TABLE product_reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
@@ -259,9 +230,7 @@ CREATE TABLE product_reviews (
     INDEX idx_approved (is_approved)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- WISHLIST TABLE
--- ========================================
 CREATE TABLE wishlists (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -272,9 +241,7 @@ CREATE TABLE wishlists (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ========================================
 -- NEWSLETTER SUBSCRIBERS TABLE
--- ========================================
 CREATE TABLE newsletter_subscribers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -284,9 +251,7 @@ CREATE TABLE newsletter_subscribers (
     INDEX idx_email (email)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- BANNERS TABLE
--- ========================================
 CREATE TABLE banners (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -303,9 +268,7 @@ CREATE TABLE banners (
     INDEX idx_active (is_active)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- SETTINGS TABLE
--- ========================================
 CREATE TABLE settings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     setting_key VARCHAR(100) NOT NULL UNIQUE,
@@ -317,9 +280,7 @@ CREATE TABLE settings (
     INDEX idx_group (setting_group)
 ) ENGINE=InnoDB;
 
--- ========================================
 -- INSERT SAMPLE DATA
--- ========================================
 
 -- Insert Categories
 INSERT INTO categories (name, slug, description, image) VALUES

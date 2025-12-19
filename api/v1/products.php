@@ -1,7 +1,5 @@
 <?php
 /**
- * LUXE Fashion - Products API
- * 
  * Product-related API endpoints
  */
 
@@ -21,12 +19,13 @@ switch ($action) {
         $filters = [
             'category_id' => $_GET['category_id'] ?? null,
             'category_slug' => $_GET['category'] ?? null,
+            'gender' => $_GET['gender'] ?? null,
             'min_price' => $_GET['min_price'] ?? null,
             'max_price' => $_GET['max_price'] ?? null,
             'is_featured' => isset($_GET['featured']),
             'is_new' => isset($_GET['new']),
             'is_bestseller' => isset($_GET['bestseller']),
-            'on_sale' => isset($_GET['sale']),
+            'on_sale' => isset($_GET['sale']) || !empty($_GET['on_sale']),
             'search' => $_GET['q'] ?? null,
             'sort' => $_GET['sort'] ?? 'newest'
         ];

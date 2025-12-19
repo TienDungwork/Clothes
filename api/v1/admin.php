@@ -1,7 +1,5 @@
 <?php
 /**
- * LUXE Fashion - Admin API
- * 
  * Admin-related API endpoints
  */
 
@@ -25,14 +23,15 @@ switch ($action) {
         
         $db = Database::getInstance();
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['name'])));
-        $sql = "INSERT INTO products (name, slug, price, sale_price, category_id, stock_quantity, image, description, status, is_featured, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO products (name, slug, price, sale_price, category_id, gender, stock_quantity, image, description, status, is_featured, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         $db->query($sql, [
             $input['name'],
             $slug,
             $input['price'],
             $input['sale_price'] ?? null,
             $input['category_id'] ?? null,
+            $input['gender'] ?? 'unisex',
             $input['stock_quantity'] ?? 0,
             $input['image'] ?? null,
             $input['description'] ?? null,
@@ -54,7 +53,7 @@ switch ($action) {
         
         $db = Database::getInstance();
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['name'])));
-        $sql = "UPDATE products SET name = ?, slug = ?, price = ?, sale_price = ?, category_id = ?, 
+        $sql = "UPDATE products SET name = ?, slug = ?, price = ?, sale_price = ?, category_id = ?, gender = ?, 
                 stock_quantity = ?, image = ?, description = ?, status = ?, is_featured = ?, updated_at = NOW() WHERE id = ?";
         $db->query($sql, [
             $input['name'],
@@ -62,6 +61,7 @@ switch ($action) {
             $input['price'],
             $input['sale_price'] ?? null,
             $input['category_id'] ?? null,
+            $input['gender'] ?? 'unisex',
             $input['stock_quantity'] ?? 0,
             $input['image'] ?? null,
             $input['description'] ?? null,

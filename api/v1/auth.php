@@ -1,7 +1,5 @@
 <?php
 /**
- * LUXE Fashion - Auth API
- * 
  * Authentication and user-related API endpoints
  */
 

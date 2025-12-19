@@ -97,6 +97,7 @@ class Product
                     $orderBy = 'p.name DESC';
                     break;
                 case 'popular':
+                case 'bestseller':
                     $orderBy = 'p.sold_count DESC';
                     break;
                 case 'rating':

@@ -1,9 +1,4 @@
 <?php
-/**
- * LUXE Fashion - Main Bootstrap File
- * 
- * This file initializes the application
- */
 
 // Define app constant
 define('LUXE_APP', true);

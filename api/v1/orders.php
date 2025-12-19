@@ -1,7 +1,5 @@
 <?php
 /**
- * LUXE Fashion - Orders API
- * 
  * Order-related API endpoints
  */
 

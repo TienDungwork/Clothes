@@ -17,14 +17,42 @@ class Order
 
     /**
      * Create new order
+     * Supports partial checkout: if items are provided in $data, only those items are checked out
      */
     public function create(array $data): array
     {
         $cart = new Cart();
         $cartData = $cart->getCart();
 
-        if (empty($cartData['items'])) {
-            return ['success' => false, 'message' => 'Giỏ hàng trống'];
+        // Check if specific items were provided (partial checkout)
+        $itemsToCheckout = [];
+        $itemIdsToRemove = [];
+        
+        if (!empty($data['items']) && is_array($data['items'])) {
+            // Partial checkout: only process specified items
+            $requestedIds = array_column($data['items'], 'id');
+            foreach ($cartData['items'] as $item) {
+                if (in_array($item['id'], $requestedIds)) {
+                    $itemsToCheckout[] = $item;
+                    $itemIdsToRemove[] = $item['id'];
+                }
+            }
+            
+            if (empty($itemsToCheckout)) {
+                return ['success' => false, 'message' => 'Không tìm thấy sản phẩm đã chọn trong giỏ hàng'];
+            }
+            
+            // Use provided totals if available, otherwise calculate
+            $subtotal = $data['subtotal'] ?? array_sum(array_column($itemsToCheckout, 'subtotal'));
+            $shippingFee = $data['shipping_fee'] ?? ($subtotal >= 500000 ? 0 : 30000);
+        } else {
+            // Full cart checkout (backward compatible)
+            if (empty($cartData['items'])) {
+                return ['success' => false, 'message' => 'Giỏ hàng trống'];
+            }
+            $itemsToCheckout = $cartData['items'];
+            $subtotal = $cartData['subtotal'];
+            $shippingFee = $cartData['shipping_fee'];
         }
 
         $this->db->beginTransaction();
@@ -34,17 +62,27 @@ class Order
             $orderCode = $this->generateOrderCode();
 
             // Calculate totals
-            $subtotal = $cartData['subtotal'];
-            $shippingFee = $cartData['shipping_fee'];
             $discountAmount = $data['discount_amount'] ?? 0;
             $totalAmount = $subtotal + $shippingFee - $discountAmount;
 
             // Create order
+            // Determine payment status based on payment method
+            // For bank_transfer, we could mark as 'paid' if you trust QR payments
+            // For COD, always 'pending' until delivery
+            $paymentMethod = $data['payment_method'] ?? 'cod';
+            $paymentStatus = 'pending'; // Default
+            
+            // If bank_transfer is selected, set to 'paid' (assuming QR payment was completed)
+            // Or keep 'pending' if you want admin to manually confirm
+            if ($paymentMethod === 'bank_transfer') {
+                $paymentStatus = 'paid'; // Auto-mark as paid for bank transfers
+            }
+            
             $sql = "INSERT INTO {$this->table} 
                     (user_id, order_code, customer_name, customer_email, customer_phone, 
                      shipping_address, subtotal, shipping_fee, discount_amount, total_amount,
-                     coupon_code, payment_method, notes) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     coupon_code, payment_method, payment_status, notes) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $this->db->query($sql, [
                 $_SESSION['user_id'] ?? null,
@@ -58,14 +96,15 @@ class Order
                 $discountAmount,
                 $totalAmount,
                 $data['coupon_code'] ?? null,
-                $data['payment_method'] ?? 'cod',
+                $paymentMethod,
+                $paymentStatus,
                 $data['notes'] ?? null
             ]);
 
             $orderId = $this->db->lastInsertId();
 
             // Create order items
-            foreach ($cartData['items'] as $item) {
+            foreach ($itemsToCheckout as $item) {
                 $this->createOrderItem($orderId, $item);
 
                 // Update product stock
@@ -83,8 +122,16 @@ class Order
                 $this->db->query($sql, [$data['coupon_code']]);
             }
 
-            // Clear cart
-            $cart->clear();
+            // Remove checked-out items from cart (partial or full)
+            if (!empty($itemIdsToRemove)) {
+                // Partial checkout: only remove checked-out items
+                foreach ($itemIdsToRemove as $itemId) {
+                    $cart->remove($itemId);
+                }
+            } else {
+                // Full checkout: clear entire cart
+                $cart->clear();
+            }
 
             $this->db->commit();
 

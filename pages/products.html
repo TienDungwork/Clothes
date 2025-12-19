@@ -423,28 +423,6 @@
                     </div>
 
                     <div class="filter-section">
-                        <h4 class="filter-title">Khoảng Giá</h4>
-                        <div class="price-range">
-                            <input type="number" class="price-input" placeholder="Từ" id="priceMin">
-                            <span>-</span>
-                            <input type="number" class="price-input" placeholder="Đến" id="priceMax">
-                        </div>
-                    </div>
-
-                    <div class="filter-section">
-                        <h4 class="filter-title">Màu Sắc</h4>
-                        <div class="filter-colors">
-                            <button class="color-option" style="background:#1a1a1a" data-color="black"></button>
-                            <button class="color-option" style="background:#ffffff; border:1px solid #ddd"
-                                data-color="white"></button>
-                            <button class="color-option" style="background:#b76e79" data-color="pink"></button>
-                            <button class="color-option" style="background:#4a5568" data-color="gray"></button>
-                            <button class="color-option" style="background:#2563eb" data-color="blue"></button>
-                            <button class="color-option" style="background:#dc2626" data-color="red"></button>
-                        </div>
-                    </div>
-
-                    <div class="filter-section">
                         <h4 class="filter-title">Kích Thước</h4>
                         <div class="filter-sizes">
                             <button class="size-option" data-size="S">S</button>
@@ -569,10 +547,14 @@
                 if (currentFilters.gender) url += `&gender=${currentFilters.gender}`;
                 if (currentFilters.category) url += `&category=${currentFilters.category}`;
                 if (currentFilters.sale) url += `&on_sale=1`;
+                if (currentFilters.is_new) url += `&is_new=1`;
+                if (currentFilters.bestseller) url += `&bestseller=1`;
                 if (currentFilters.search) url += `&search=${encodeURIComponent(currentFilters.search)}`;
                 if (currentFilters.sort) url += `&sort=${currentFilters.sort}`;
                 if (currentFilters.min_price) url += `&min_price=${currentFilters.min_price}`;
                 if (currentFilters.max_price) url += `&max_price=${currentFilters.max_price}`;
+                if (currentFilters.size) url += `&size=${currentFilters.size}`;
+                if (currentFilters.color) url += `&color=${currentFilters.color}`;
 
                 const response = await fetch(url);
                 const data = await response.json();
@@ -660,9 +642,14 @@
             });
 
             document.getElementById('applyFilter').addEventListener('click', () => {
-                currentFilters.min_price = document.getElementById('priceMin').value;
-                currentFilters.max_price = document.getElementById('priceMax').value;
                 currentFilters.sale = document.getElementById('filterSale').checked ? '1' : '';
+                currentFilters.is_new = document.getElementById('filterNew').checked ? '1' : '';
+                currentFilters.bestseller = document.getElementById('filterBestseller').checked ? '1' : '';
+
+                // Get selected size
+                const activeSize = document.querySelector('.size-option.active');
+                currentFilters.size = activeSize ? activeSize.dataset.size : '';
+
                 currentPage = 1;
                 loadProducts();
             });
@@ -677,6 +664,14 @@
                     const q = e.target.value.trim();
                     if (q) window.location.href = `products.html?q=${encodeURIComponent(q)}`;
                 }
+            });
+
+            // Size option toggle
+            document.querySelectorAll('.size-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.size-option').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
             });
         }
     </script>

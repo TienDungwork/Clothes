@@ -1,7 +1,5 @@
 <?php
 /**
- * LUXE Fashion - Cart Model
- * 
  * Xử lý giỏ hàng với session và database
  */
 
@@ -93,7 +91,7 @@ class Cart
     }
 
     /**
-     * Update item quantity
+     * Update item quantity in cart
      */
     public function update(int $itemId, int $quantity): array
     {

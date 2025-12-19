@@ -1,7 +1,5 @@
 <?php
 /**
- * LUXE Fashion - Cart API
- * 
  * Cart-related API endpoints
  */
 

@@ -1,7 +1,5 @@
 <?php
 /**
- * LUXE Fashion - API Handler
- * 
  * RESTful API endpoints cho frontend
  */
 
@@ -58,7 +56,7 @@ function getJsonInput(): array
 try {
     // Route requests
     switch ($action) {
-        // ==================== PRODUCTS ====================
+        //PRODUCTS
         case 'products':
             if ($method !== 'GET') errorResponse('Method not allowed', 405);
             
@@ -66,14 +64,17 @@ try {
             $filters = [
                 'category_id' => $_GET['category_id'] ?? null,
                 'category_slug' => $_GET['category'] ?? null,
+                'gender' => $_GET['gender'] ?? null,
                 'min_price' => $_GET['min_price'] ?? null,
                 'max_price' => $_GET['max_price'] ?? null,
                 'is_featured' => isset($_GET['featured']),
-                'is_new' => isset($_GET['new']),
+                'is_new' => isset($_GET['new']) || isset($_GET['is_new']),
                 'is_bestseller' => isset($_GET['bestseller']),
-                'on_sale' => isset($_GET['sale']),
-                'search' => $_GET['q'] ?? null,
-                'sort' => $_GET['sort'] ?? 'newest'
+                'on_sale' => isset($_GET['sale']) || isset($_GET['on_sale']),
+                'search' => $_GET['q'] ?? ($_GET['search'] ?? null),
+                'sort' => $_GET['sort'] ?? 'newest',
+                'size' => $_GET['size'] ?? null,
+                'color' => $_GET['color'] ?? null
             ];
             
             $page = (int) ($_GET['page'] ?? 1);
@@ -553,14 +554,15 @@ try {
             }
             
             $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['name'])));
-            $sql = "INSERT INTO products (name, slug, price, sale_price, category_id, stock_quantity, image, description, status, is_featured, created_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            $sql = "INSERT INTO products (name, slug, price, sale_price, category_id, gender, stock_quantity, image, description, status, is_featured, created_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
             $db->query($sql, [
                 $input['name'],
                 $slug,
                 $input['price'],
                 $input['sale_price'] ?? null,
                 $input['category_id'] ?? null,
+                $input['gender'] ?? 'unisex',
                 $input['stock_quantity'] ?? 0,
                 $input['image'] ?? null,
                 $input['description'] ?? null,
@@ -583,7 +585,7 @@ try {
             if (empty($input['id'])) errorResponse('ID sản phẩm là bắt buộc');
             
             $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['name'])));
-            $sql = "UPDATE products SET name = ?, slug = ?, price = ?, sale_price = ?, category_id = ?, 
+            $sql = "UPDATE products SET name = ?, slug = ?, price = ?, sale_price = ?, category_id = ?, gender = ?, 
                     stock_quantity = ?, image = ?, description = ?, status = ?, is_featured = ?, updated_at = NOW() WHERE id = ?";
             $db->query($sql, [
                 $input['name'],
@@ -591,6 +593,7 @@ try {
                 $input['price'],
                 $input['sale_price'] ?? null,
                 $input['category_id'] ?? null,
+                $input['gender'] ?? 'unisex',
                 $input['stock_quantity'] ?? 0,
                 $input['image'] ?? null,
                 $input['description'] ?? null,
@@ -619,6 +622,391 @@ try {
             $db->query("DELETE FROM products WHERE id = ?", [$input['id']]);
             
             jsonResponse(['success' => true, 'message' => 'Xóa sản phẩm thành công']);
+            break;
+
+        // ==================== ADMIN ORDERS ====================
+        case 'admin.orders.list':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $page = (int)($_GET['page'] ?? 1);
+            $limit = 10;
+            $offset = ($page - 1) * $limit;
+            $status = $_GET['status'] ?? '';
+            
+            $whereClause = '';
+            $params = [];
+            if ($status && in_array($status, ['pending', 'confirmed', 'processing', 'shipping', 'delivered', 'cancelled', 'returned'])) {
+                $whereClause = 'WHERE o.order_status = ?';
+                $params[] = $status;
+            }
+            
+            $sql = "SELECT o.*, 
+                           (SELECT COUNT(*) FROM order_items WHERE order_id = o.id) as item_count
+                    FROM orders o 
+                    $whereClause
+                    ORDER BY o.created_at DESC 
+                    LIMIT $limit OFFSET $offset";
+            $orders = $db->query($sql, $params)->fetchAll();
+            
+            $countSql = "SELECT COUNT(*) as total FROM orders o $whereClause";
+            $total = $db->query($countSql, $params)->fetch()['total'];
+            
+            jsonResponse([
+                'success' => true, 
+                'data' => $orders,
+                'pagination' => [
+                    'page' => $page,
+                    'limit' => $limit,
+                    'total' => $total,
+                    'totalPages' => ceil($total / $limit)
+                ]
+            ]);
+            break;
+
+        case 'admin.orders.detail':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $orderId = (int)($_GET['id'] ?? 0);
+            if (!$orderId) errorResponse('Order ID required');
+            
+            $order = $db->query("SELECT * FROM orders WHERE id = ?", [$orderId])->fetch();
+            if (!$order) errorResponse('Order not found', 404);
+            
+            $items = $db->query("SELECT oi.*, p.image FROM order_items oi LEFT JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?", [$orderId])->fetchAll();
+            $order['items'] = $items;
+            
+            jsonResponse(['success' => true, 'data' => $order]);
+            break;
+
+        case 'admin.orders.update':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            $orderId = (int)($input['id'] ?? 0);
+            $status = $input['order_status'] ?? '';
+            $paymentStatus = $input['payment_status'] ?? null;
+            
+            if (!$orderId) errorResponse('Order ID required');
+            
+            $validStatuses = ['pending', 'confirmed', 'processing', 'shipping', 'delivered', 'cancelled', 'returned'];
+            if ($status && !in_array($status, $validStatuses)) {
+                errorResponse('Invalid order status');
+            }
+            
+            $updates = [];
+            $params = [];
+            
+            if ($status) {
+                $updates[] = "order_status = ?";
+                $params[] = $status;
+                
+                if ($status === 'shipping') {
+                    $updates[] = "shipped_at = NOW()";
+                } elseif ($status === 'delivered') {
+                    $updates[] = "delivered_at = NOW()";
+                    $updates[] = "payment_status = 'paid'";
+                }
+            }
+            
+            if ($paymentStatus && in_array($paymentStatus, ['pending', 'paid', 'failed', 'refunded'])) {
+                $updates[] = "payment_status = ?";
+                $params[] = $paymentStatus;
+            }
+            
+            if (empty($updates)) errorResponse('No valid updates provided');
+            
+            $params[] = $orderId;
+            $sql = "UPDATE orders SET " . implode(', ', $updates) . ", updated_at = NOW() WHERE id = ?";
+            $db->query($sql, $params);
+            
+            jsonResponse(['success' => true, 'message' => 'Cập nhật đơn hàng thành công']);
+            break;
+
+        //ADMIN USERS
+        case 'admin.users.list':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $page = (int)($_GET['page'] ?? 1);
+            $limit = 10;
+            $offset = ($page - 1) * $limit;
+            $role = $_GET['role'] ?? 'customer';
+            
+            $sql = "SELECT u.id, u.email, u.full_name, u.phone, u.avatar, u.role, u.status, u.created_at,
+                           COUNT(DISTINCT o.id) as order_count,
+                           COALESCE(SUM(CASE WHEN o.order_status NOT IN ('cancelled', 'returned') THEN o.total_amount ELSE 0 END), 0) as total_spent
+                    FROM users u 
+                    LEFT JOIN orders o ON u.id = o.user_id
+                    WHERE u.role = ?
+                    GROUP BY u.id, u.email, u.full_name, u.phone, u.avatar, u.role, u.status, u.created_at
+                    ORDER BY u.created_at DESC 
+                    LIMIT $limit OFFSET $offset";
+            $users = $db->query($sql, [$role])->fetchAll();
+            
+            $total = $db->query("SELECT COUNT(*) as count FROM users WHERE role = ?", [$role])->fetch()['count'];
+            
+            jsonResponse([
+                'success' => true, 
+                'data' => $users,
+                'pagination' => [
+                    'page' => $page,
+                    'limit' => $limit,
+                    'total' => $total,
+                    'totalPages' => ceil($total / $limit)
+                ]
+            ]);
+            break;
+
+        case 'admin.users.detail':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $adminUser = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$adminUser || $adminUser['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $userId = (int)($_GET['id'] ?? 0);
+            if (!$userId) errorResponse('User ID required');
+            
+            $user = $db->query("SELECT id, email, full_name, phone, avatar, role, status, created_at FROM users WHERE id = ?", [$userId])->fetch();
+            if (!$user) errorResponse('User not found', 404);
+            
+            $orders = $db->query("SELECT id, order_code, total_amount, order_status, created_at FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT 10", [$userId])->fetchAll();
+            $addresses = $db->query("SELECT * FROM user_addresses WHERE user_id = ?", [$userId])->fetchAll();
+            
+            $user['orders'] = $orders;
+            $user['addresses'] = $addresses;
+            
+            jsonResponse(['success' => true, 'data' => $user]);
+            break;
+
+        case 'admin.users.update':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $adminUser = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$adminUser || $adminUser['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            $userId = (int)($input['id'] ?? 0);
+            $status = $input['status'] ?? '';
+            
+            if (!$userId) errorResponse('User ID required');
+            if (!in_array($status, ['active', 'inactive', 'banned'])) {
+                errorResponse('Invalid status');
+            }
+            
+            $db->query("UPDATE users SET status = ?, updated_at = NOW() WHERE id = ?", [$status, $userId]);
+            
+            jsonResponse(['success' => true, 'message' => 'Cập nhật trạng thái thành công']);
+            break;
+
+        // ADMIN CATEGORIES
+        case 'admin.categories.list':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $sql = "SELECT c.*, 
+                           p.name as parent_name,
+                           (SELECT COUNT(*) FROM products WHERE category_id = c.id) as product_count
+                    FROM categories c 
+                    LEFT JOIN categories p ON c.parent_id = p.id
+                    ORDER BY c.sort_order, c.name";
+            $categories = $db->query($sql)->fetchAll();
+            
+            jsonResponse(['success' => true, 'data' => $categories]);
+            break;
+
+        case 'admin.categories.create':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            if (empty($input['name'])) errorResponse('Tên danh mục là bắt buộc');
+            
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['name'])));
+            
+            // Check duplicate slug
+            $existing = $db->query("SELECT id FROM categories WHERE slug = ?", [$slug])->fetch();
+            if ($existing) {
+                $slug .= '-' . time();
+            }
+            
+            $sql = "INSERT INTO categories (name, slug, description, image, parent_id, sort_order, is_active, created_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+            $db->query($sql, [
+                $input['name'],
+                $slug,
+                $input['description'] ?? null,
+                $input['image'] ?? null,
+                $input['parent_id'] ?? null,
+                $input['sort_order'] ?? 0,
+                $input['is_active'] ?? 1
+            ]);
+            
+            jsonResponse(['success' => true, 'message' => 'Thêm danh mục thành công', 'id' => $db->lastInsertId()]);
+            break;
+
+        case 'admin.categories.update':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            if (empty($input['id'])) errorResponse('ID danh mục là bắt buộc');
+            
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['name'])));
+            
+            $sql = "UPDATE categories SET name = ?, slug = ?, description = ?, image = ?, 
+                    parent_id = ?, sort_order = ?, is_active = ?, updated_at = NOW() WHERE id = ?";
+            $db->query($sql, [
+                $input['name'],
+                $slug,
+                $input['description'] ?? null,
+                $input['image'] ?? null,
+                $input['parent_id'] ?? null,
+                $input['sort_order'] ?? 0,
+                $input['is_active'] ?? 1,
+                $input['id']
+            ]);
+            
+            jsonResponse(['success' => true, 'message' => 'Cập nhật danh mục thành công']);
+            break;
+
+        case 'admin.categories.delete':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            if (empty($input['id'])) errorResponse('ID danh mục là bắt buộc');
+            
+            // Check if has products
+            $productCount = $db->query("SELECT COUNT(*) as count FROM products WHERE category_id = ?", [$input['id']])->fetch()['count'];
+            if ($productCount > 0) {
+                errorResponse("Không thể xóa danh mục có $productCount sản phẩm. Vui lòng chuyển sản phẩm sang danh mục khác trước.");
+            }
+            
+            // Check if has children
+            $childCount = $db->query("SELECT COUNT(*) as count FROM categories WHERE parent_id = ?", [$input['id']])->fetch()['count'];
+            if ($childCount > 0) {
+                errorResponse("Không thể xóa danh mục có $childCount danh mục con.");
+            }
+            
+            $db->query("DELETE FROM categories WHERE id = ?", [$input['id']]);
+            
+            jsonResponse(['success' => true, 'message' => 'Xóa danh mục thành công']);
+            break;
+
+        // ADMIN SETTINGS 
+        case 'admin.settings.get':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $group = $_GET['group'] ?? null;
+            
+            $sql = "SELECT setting_key, setting_value, setting_group FROM settings";
+            $params = [];
+            if ($group) {
+                $sql .= " WHERE setting_group = ?";
+                $params[] = $group;
+            }
+            
+            $rows = $db->query($sql, $params)->fetchAll();
+            
+            $settings = [];
+            foreach ($rows as $row) {
+                $settings[$row['setting_key']] = $row['setting_value'];
+            }
+            
+            jsonResponse(['success' => true, 'data' => $settings]);
+            break;
+
+        case 'admin.settings.update':
+            if ($method !== 'POST') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $input = getJsonInput();
+            if (empty($input['settings']) || !is_array($input['settings'])) {
+                errorResponse('Settings data required');
+            }
+            
+            foreach ($input['settings'] as $key => $value) {
+                // Check if setting exists
+                $existing = $db->query("SELECT id FROM settings WHERE setting_key = ?", [$key])->fetch();
+                
+                if ($existing) {
+                    $db->query("UPDATE settings SET setting_value = ?, updated_at = NOW() WHERE setting_key = ?", [$value, $key]);
+                } else {
+                    $group = $input['group'] ?? 'general';
+                    $db->query("INSERT INTO settings (setting_key, setting_value, setting_group, created_at) VALUES (?, ?, ?, NOW())", [$key, $value, $group]);
+                }
+            }
+            
+            jsonResponse(['success' => true, 'message' => 'Cập nhật cài đặt thành công']);
+            break;
+
+        // ADMIN STATS 
+        case 'admin.stats':
+            if ($method !== 'GET') errorResponse('Method not allowed', 405);
+            if (!isset($_SESSION['user_id'])) errorResponse('Unauthorized', 401);
+            
+            $db = Database::getInstance();
+            $user = $db->query("SELECT role FROM users WHERE id = ?", [$_SESSION['user_id']])->fetch();
+            if (!$user || $user['role'] !== 'admin') errorResponse('Forbidden', 403);
+            
+            $stats = [
+                'products' => $db->query("SELECT COUNT(*) as count FROM products")->fetch()['count'],
+                'orders' => $db->query("SELECT COUNT(*) as count FROM orders")->fetch()['count'],
+                'users' => $db->query("SELECT COUNT(*) as count FROM users WHERE role = 'customer'")->fetch()['count'],
+                'revenue' => $db->query("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE order_status NOT IN ('cancelled', 'returned')")->fetch()['total'],
+                'pending_orders' => $db->query("SELECT COUNT(*) as count FROM orders WHERE order_status = 'pending'")->fetch()['count'],
+                'today_orders' => $db->query("SELECT COUNT(*) as count FROM orders WHERE DATE(created_at) = CURDATE()")->fetch()['count'],
+            ];
+            
+            jsonResponse(['success' => true, 'data' => $stats]);
             break;
 
         default:

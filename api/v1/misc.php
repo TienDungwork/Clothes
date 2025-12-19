@@ -1,7 +1,5 @@
 <?php
 /**
- * LUXE Fashion - Misc API
- * 
  * Newsletter and settings endpoints
  */
 

@@ -150,17 +150,20 @@ const AuthManager = {
         const registerTab = document.querySelector('[data-auth-tab="register"]');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
+        const footerText = document.getElementById('authFooterText');
 
         if (type === 'login') {
             loginTab?.classList.add('active');
             registerTab?.classList.remove('active');
             if (loginForm) loginForm.style.display = 'block';
             if (registerForm) registerForm.style.display = 'none';
+            if (footerText) footerText.innerHTML = 'Chưa có tài khoản? <a href="#" id="switchToRegister">Đăng ký ngay</a>';
         } else {
             loginTab?.classList.remove('active');
             registerTab?.classList.add('active');
             if (loginForm) loginForm.style.display = 'none';
             if (registerForm) registerForm.style.display = 'block';
+            if (footerText) footerText.innerHTML = 'Đã có tài khoản? <a href="#" id="switchToLogin">Đăng nhập ngay</a>';
         }
     },
 
@@ -275,6 +278,11 @@ const AuthManager = {
             if (e.target.id === 'switchToRegister') {
                 e.preventDefault();
                 this.switchTab('register');
+            }
+
+            if (e.target.id === 'switchToLogin') {
+                e.preventDefault();
+                this.switchTab('login');
             }
         });
 
