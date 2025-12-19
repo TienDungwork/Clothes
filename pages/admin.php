@@ -1,7 +1,7 @@
 <?php
 define('LUXE_APP', true);
-require_once 'config/config.php';
-require_once 'includes/Database.php';
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../includes/Database.php';
 
 session_name(SESSION_NAME);
 session_start();
@@ -452,7 +452,7 @@ $categories = $db->query("SELECT * FROM categories ORDER BY name")->fetchAll();
 <?php if (!$isAdmin): ?>
     <div class="login-container">
         <div class="login-box">
-            <img src="assets/icons/logo.jpg" class="login-logo" alt="LUXE">
+            <img src="../assets/icons/logo.jpg" class="login-logo" alt="LUXE">
             <h1>LUXE Admin</h1>
             <p class="login-subtitle">Đăng nhập để quản lý cửa hàng</p>
             <div id="loginError" class="alert alert-error" style="display:none;"></div>
@@ -482,7 +482,7 @@ $categories = $db->query("SELECT * FROM categories ORDER BY name")->fetchAll();
             btn.textContent = 'Đang xử lý...';
             
             try {
-                const res = await fetch('api/index.php?action=auth.login', {
+                const res = await fetch('/api/index.php?action=auth.login', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -515,7 +515,7 @@ $categories = $db->query("SELECT * FROM categories ORDER BY name")->fetchAll();
     <div class="admin-container">
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <img src="assets/icons/logo.jpg" alt="LUXE">
+                <img src="../assets/icons/logo.jpg" alt="LUXE">
                 <span>LUXE Admin</span>
             </div>
             <ul class="sidebar-menu">
@@ -753,7 +753,7 @@ $categories = $db->query("SELECT * FROM categories ORDER BY name")->fetchAll();
     </div>
     
     <script>
-        const API = 'api/index.php';
+        const API = '/api/index.php';
         
         function openModal(mode) {
             document.getElementById('productModal').classList.add('active');
@@ -840,7 +840,8 @@ $categories = $db->query("SELECT * FROM categories ORDER BY name")->fetchAll();
         
         async function logout() {
             await fetch(`${API}?action=auth.logout`, { method: 'POST' });
-            location.reload();
+            sessionStorage.removeItem('luxe_user');
+            window.location.href = '/pages/index.html';
         }
         
         // Close modal on outside click

@@ -162,8 +162,9 @@ class Order
     public function getOrderItems(int $orderId): array
     {
         $sql = "SELECT oi.*, 
-                       (SELECT image_url FROM product_images WHERE product_id = oi.product_id AND is_primary = 1 LIMIT 1) as image
+                       COALESCE(p.image, (SELECT image_url FROM product_images WHERE product_id = oi.product_id AND is_primary = 1 LIMIT 1)) as product_image
                 FROM order_items oi 
+                LEFT JOIN products p ON oi.product_id = p.id
                 WHERE oi.order_id = ?";
         
         return $this->db->query($sql, [$orderId])->fetchAll();

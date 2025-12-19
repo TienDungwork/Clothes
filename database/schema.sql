@@ -52,6 +52,7 @@ CREATE TABLE categories (
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
+    gender ENUM('nam', 'nu', 'unisex', 'phu-kien') DEFAULT 'unisex',
     name VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
@@ -73,6 +74,7 @@ CREATE TABLE products (
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
     INDEX idx_slug (slug),
     INDEX idx_category (category_id),
+    INDEX idx_gender (gender),
     INDEX idx_price (price),
     INDEX idx_featured (is_featured),
     INDEX idx_status (status),

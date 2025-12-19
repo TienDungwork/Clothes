@@ -10,11 +10,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/header.css">
-    <link rel="stylesheet" href="assets/css/products.css">
-    <link rel="stylesheet" href="assets/css/footer.css">
-    <link rel="stylesheet" href="assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/products.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
     <style>
         .page-header {
             padding: 180px 0 60px;
@@ -352,15 +352,15 @@
     <div class="header-main">
         <div class="container">
             <a href="index.html" class="logo">
-                <div class="logo-icon"><img src="assets/icons/logo.jpg" alt="logo-icon"></div>
+                <div class="logo-icon"><img src="../assets/icons/logo.jpg" alt="logo-icon"></div>
                 LUXE
             </a>
             <nav class="nav">
                 <ul class="nav-menu" id="navMenu">
                     <li><a href="index.html" class="nav-link">Trang Chủ</a></li>
-                    <li><a href="products.html?category=nam" class="nav-link" data-cat="nam">Thời Trang Nam</a></li>
-                    <li><a href="products.html?category=nu" class="nav-link" data-cat="nu">Thời Trang Nữ</a></li>
-                    <li><a href="products.html?category=phu-kien" class="nav-link" data-cat="phu-kien">Phụ Kiện</a>
+                    <li><a href="products.html?gender=nam" class="nav-link" data-cat="nam">Thời Trang Nam</a></li>
+                    <li><a href="products.html?gender=nu" class="nav-link" data-cat="nu">Thời Trang Nữ</a></li>
+                    <li><a href="products.html?gender=phu-kien" class="nav-link" data-cat="phu-kien">Phụ Kiện</a>
                     </li>
                     <li><a href="products.html" class="nav-link">Bộ Sưu Tập</a></li>
                     <li><a href="products.html?sale=1" class="nav-link" data-sale="1">Sale</a></li>
@@ -377,7 +377,7 @@
                         </svg>
                     </button>
                 </div>
-                <button class="header-icon" title="Tài khoản" onclick="AuthManager.showLogin()">
+                <button class="header-icon" title="Tài khoản">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
@@ -416,9 +416,9 @@
                     <div class="filter-section">
                         <h4 class="filter-title">Danh Mục</h4>
                         <a href="products.html" class="filter-category" data-cat="">Tất cả</a>
-                        <a href="products.html?category=nam" class="filter-category" data-cat="nam">Thời Trang Nam</a>
-                        <a href="products.html?category=nu" class="filter-category" data-cat="nu">Thời Trang Nữ</a>
-                        <a href="products.html?category=phu-kien" class="filter-category" data-cat="phu-kien">Phụ
+                        <a href="products.html?gender=nam" class="filter-category" data-cat="nam">Thời Trang Nam</a>
+                        <a href="products.html?gender=nu" class="filter-category" data-cat="nu">Thời Trang Nữ</a>
+                        <a href="products.html?gender=phu-kien" class="filter-category" data-cat="phu-kien">Phụ
                             Kiện</a>
                     </div>
 
@@ -506,8 +506,8 @@
         </div>
     </footer>
 
-    <script src="assets/js/modules/auth.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/modules/auth.js"></script>
+    <script src="../assets/js/app.js"></script>
     <script>
         let currentPage = 1;
         let currentFilters = {};
@@ -523,6 +523,7 @@
 
         function parseUrl() {
             const params = new URLSearchParams(window.location.search);
+            currentFilters.gender = params.get('gender') || '';
             currentFilters.category = params.get('category') || '';
             currentFilters.sale = params.get('sale') || '';
             currentFilters.search = params.get('q') || '';
@@ -533,9 +534,9 @@
                 'phu-kien': 'Phụ Kiện'
             };
 
-            if (currentFilters.category && titles[currentFilters.category]) {
-                document.getElementById('pageTitle').textContent = titles[currentFilters.category];
-                document.getElementById('breadcrumbCurrent').textContent = titles[currentFilters.category];
+            if (currentFilters.gender && titles[currentFilters.gender]) {
+                document.getElementById('pageTitle').textContent = titles[currentFilters.gender];
+                document.getElementById('breadcrumbCurrent').textContent = titles[currentFilters.gender];
             } else if (currentFilters.sale) {
                 document.getElementById('pageTitle').textContent = 'Sản Phẩm Giảm Giá';
                 document.getElementById('breadcrumbCurrent').textContent = 'Sale';
@@ -546,13 +547,13 @@
             }
 
             document.querySelectorAll('.filter-category').forEach(el => {
-                if (el.dataset.cat === currentFilters.category) {
+                if (el.dataset.cat === currentFilters.gender) {
                     el.classList.add('active');
                 }
             });
 
             document.querySelectorAll('.nav-link').forEach(el => {
-                if (el.dataset.cat === currentFilters.category ||
+                if (el.dataset.cat === currentFilters.gender ||
                     (el.dataset.sale && currentFilters.sale)) {
                     el.classList.add('active');
                 }
@@ -564,7 +565,8 @@
             grid.innerHTML = '<div class="loading">Đang tải sản phẩm...</div>';
 
             try {
-                let url = `./api/index.php?action=products&page=${currentPage}`;
+                let url = `/api/index.php?action=products&page=${currentPage}`;
+                if (currentFilters.gender) url += `&gender=${currentFilters.gender}`;
                 if (currentFilters.category) url += `&category=${currentFilters.category}`;
                 if (currentFilters.sale) url += `&on_sale=1`;
                 if (currentFilters.search) url += `&search=${encodeURIComponent(currentFilters.search)}`;

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn Hàng | LUXE Fashion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <style>
+        .account-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 70vh;
+            padding-top: 140px;
+        }
+
+        .account-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .account-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .account-header p {
+            color: var(--text-light);
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .account-sidebar {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .user-info {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .user-avatar-large {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .user-email {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .account-nav {
+            list-style: none;
+        }
+
+        .account-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .account-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            border-radius: 10px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .account-nav a:hover,
+        .account-nav a.active {
+            background: linear-gradient(135deg, rgba(183, 110, 121, 0.1) 0%, rgba(183, 110, 121, 0.05) 100%);
+            color: var(--accent);
+        }
+
+        .account-nav a.active {
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .account-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title svg {
+            color: var(--accent);
+        }
+
+        /* Order Filters */
+        .order-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            background: white;
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(183, 110, 121, 0.1) 0%, rgba(183, 110, 121, 0.05) 100%);
+            color: var(--accent);
+        }
+
+        /* Order Cards */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .order-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .order-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fef3cd;
+            color: #856404;
+        }
+
+        .status-processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-shipped {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-delivered {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-body {
+            padding: 1.5rem;
+        }
+
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .order-item-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: var(--bg);
+        }
+
+        .order-item-info {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .order-item-details {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .order-item-price {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .order-total {
+            font-size: 1.1rem;
+        }
+
+        .order-total span {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-outline {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-primary {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .order-footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="header-main">
+            <div class="container">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon"><img src="../assets/icons/logo.jpg" alt="logo-icon"></div>
+                    LUXE
+                </a>
+                <nav class="nav">
+                    <ul class="nav-menu">
+                        <li><a href="index.html" class="nav-link">Trang Chủ</a></li>
+                        <li><a href="products.html?gender=nam" class="nav-link">Thời Trang Nam</a></li>
+                        <li><a href="products.html?gender=nu" class="nav-link">Thời Trang Nữ</a></li>
+                        <li><a href="products.html" class="nav-link">Bộ Sưu Tập</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="cart.html" class="header-icon" title="Giỏ hàng">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="account-container">
+        <div class="account-header">
+            <h1>Đơn Hàng Của Tôi</h1>
+            <p>Theo dõi và quản lý các đơn hàng của bạn</p>
+        </div>
+
+        <div class="account-grid">
+            <!-- Sidebar -->
+            <aside class="account-sidebar">
+                <div class="user-info">
+                    <div class="user-avatar-large" id="userAvatarLarge">U</div>
+                    <div class="user-name" id="userName">Người dùng</div>
+                    <div class="user-email" id="userEmail">email@example.com</div>
+                </div>
+                <ul class="account-nav">
+                    <li>
+                        <a href="account.html">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Thông tin cá nhân
+                        </a>
+                    </li>
+                    <li>
+                        <a href="orders.html" class="active">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            Đơn hàng của tôi
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="logoutLink">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Đăng xuất
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="account-content">
+                <h2 class="section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    Danh Sách Đơn Hàng
+                </h2>
+
+                <!-- Order Filters -->
+                <div class="order-filters">
+                    <button class="filter-btn active" data-filter="all">Tất cả</button>
+                    <button class="filter-btn" data-filter="pending">Chờ xác nhận</button>
+                    <button class="filter-btn" data-filter="processing">Đang xử lý</button>
+                    <button class="filter-btn" data-filter="shipped">Đang giao</button>
+                    <button class="filter-btn" data-filter="delivered">Đã giao</button>
+                    <button class="filter-btn" data-filter="cancelled">Đã huỷ</button>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading" id="loadingState">
+                    <div class="loading-spinner"></div>
+                    <p>Đang tải đơn hàng...</p>
+                </div>
+
+                <!-- Orders List -->
+                <div class="orders-list" id="ordersList" style="display: none;"></div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <h3>Chưa có đơn hàng nào</h3>
+                    <p>Bạn chưa có đơn hàng nào. Hãy bắt đầu mua sắm ngay!</p>
+                    <a href="products.html" class="btn-primary">Mua sắm ngay</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2025 LUXE Fashion. Thiết kế với ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/app.js"></script>
+    <script>
+        const API_URL = '/api/index.php';
+        let currentUser = null;
+        let allOrders = [];
+        let currentFilter = 'all';
+
+        const statusMap = {
+            'pending': { label: 'Chờ xác nhận', class: 'status-pending' },
+            'processing': { label: 'Đang xử lý', class: 'status-processing' },
+            'shipped': { label: 'Đang giao', class: 'status-shipped' },
+            'delivered': { label: 'Đã giao', class: 'status-delivered' },
+            'cancelled': { label: 'Đã huỷ', class: 'status-cancelled' }
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if logged in
+            const userData = sessionStorage.getItem('luxe_user');
+            if (!userData) {
+                window.location.href = 'index.html';
+                return;
+            }
+            currentUser = JSON.parse(userData);
+
+            // Update sidebar
+            document.getElementById('userAvatarLarge').textContent = currentUser.full_name?.charAt(0).toUpperCase() || 'U';
+            document.getElementById('userName').textContent = currentUser.full_name || 'Người dùng';
+            document.getElementById('userEmail').textContent = currentUser.email || '';
+
+            // Load orders
+            await loadOrders();
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderOrders();
+                });
+            });
+        });
+
+        async function loadOrders() {
+            try {
+                const res = await fetch(`${API_URL}?action=orders.list`);
+                const data = await res.json();
+
+                document.getElementById('loadingState').style.display = 'none';
+
+                if (data.success && data.data) {
+                    // API returns: { success: true, data: { data: [...], total, page, per_page, total_pages } }
+                    allOrders = Array.isArray(data.data) ? data.data : (data.data.data || []);
+                    renderOrders();
+                } else {
+                    showEmptyState();
+                }
+            } catch (error) {
+                console.error('Load orders error:', error);
+                document.getElementById('loadingState').style.display = 'none';
+                showEmptyState();
+            }
+        }
+
+        function renderOrders() {
+            const filteredOrders = currentFilter === 'all'
+                ? allOrders
+                : allOrders.filter(o => o.order_status === currentFilter);
+
+            const ordersList = document.getElementById('ordersList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filteredOrders.length === 0) {
+                ordersList.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            ordersList.style.display = 'flex';
+
+            ordersList.innerHTML = filteredOrders.map(order => {
+                const status = statusMap[order.order_status] || statusMap['pending'];
+                const items = order.items || [];
+                const orderDate = new Date(order.created_at).toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <span class="order-id">Đơn hàng #${order.id}</span>
+                                <span class="order-date"> • ${orderDate}</span>
+                            </div>
+                            <span class="order-status ${status.class}">${status.label}</span>
+                        </div>
+                        <div class="order-body">
+                            <div class="order-items">
+                                ${items.slice(0, 3).map(item => `
+                                    <div class="order-item">
+                                        <img src="${item.product_image || '../assets/images/placeholder.jpg'}" alt="${item.product_name}" class="order-item-img">
+                                        <div class="order-item-info">
+                                            <div class="order-item-name">${item.product_name || 'Sản phẩm'}</div>
+                                            <div class="order-item-details">
+                                                ${item.size ? `Size: ${item.size}` : ''} 
+                                                ${item.color ? `• Màu: ${item.color}` : ''} 
+                                                • SL: ${item.quantity || 1}
+                                            </div>
+                                        </div>
+                                        <div class="order-item-price">${formatPrice(item.price)}₫</div>
+                                    </div>
+                                `).join('')}
+                                ${items.length > 3 ? `<p style="color: var(--text-light); font-size: 0.9rem;">+${items.length - 3} sản phẩm khác</p>` : ''}
+                            </div>
+                            <div class="order-footer">
+                                <div class="order-total">
+                                    Tổng cộng: <span>${formatPrice(order.total_amount)}₫</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-outline" onclick="viewOrderDetail(${order.id})">Chi tiết</button>
+                                    ${order.order_status === 'pending' ? `<button class="btn-outline" onclick="cancelOrder(${order.id})">Huỷ đơn</button>` : ''}
+                                    ${order.order_status === 'delivered' ? `<button class="btn-primary" onclick="reorder(${order.id})">Mua lại</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showEmptyState() {
+            document.getElementById('ordersList').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'block';
+        }
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN').format(price || 0);
+        }
+
+        function viewOrderDetail(orderId) {
+            // TODO: Implement order detail modal or page
+            alert('Chức năng xem chi tiết đơn hàng đang phát triển');
+        }
+
+        async function cancelOrder(orderId) {
+            if (!confirm('Bạn có chắc muốn huỷ đơn hàng này?')) return;
+
+            try {
+                const res = await fetch(`${API_URL}?action=orders.cancel`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: orderId })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    alert('Đã huỷ đơn hàng thành công');
+                    await loadOrders();
+                } else {
+                    alert(data.message || 'Có lỗi xảy ra');
+                }
+            } catch (error) {
+                console.error('Cancel order error:', error);
+                alert('Có lỗi xảy ra khi huỷ đơn hàng');
+            }
+        }
+
+        function reorder(orderId) {
+            // TODO: Implement reorder functionality
+            alert('Chức năng mua lại đang phát triển');
+        }
+
+        // Logout
+        document.getElementById('logoutLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('luxe_user');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>

@@ -13,13 +13,13 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/header.css">
-    <link rel="stylesheet" href="assets/css/hero.css">
-    <link rel="stylesheet" href="assets/css/products.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/footer.css">
-    <link rel="stylesheet" href="assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/hero.css">
+    <link rel="stylesheet" href="../assets/css/products.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
 </head>
 
 <body>
@@ -41,16 +41,16 @@
         <div class="header-main">
             <div class="container">
                 <a href="index.html" class="logo">
-                    <div class="logo-icon"><img src="assets/icons/logo.jpg" alt="logo-icon"></div>
+                    <div class="logo-icon"><img src="../assets/icons/logo.jpg" alt="logo-icon"></div>
                     LUXE
                 </a>
 
                 <nav class="nav">
                     <ul class="nav-menu">
                         <li><a href="index.html" class="nav-link active">Trang Chủ</a></li>
-                        <li><a href="products.html?category=nam" class="nav-link">Thời Trang Nam</a></li>
-                        <li><a href="products.html?category=nu" class="nav-link">Thời Trang Nữ</a></li>
-                        <li><a href="products.html?category=phu-kien" class="nav-link">Phụ Kiện</a></li>
+                        <li><a href="products.html?gender=nam" class="nav-link">Thời Trang Nam</a></li>
+                        <li><a href="products.html?gender=nu" class="nav-link">Thời Trang Nữ</a></li>
+                        <li><a href="products.html?gender=phu-kien" class="nav-link">Phụ Kiện</a></li>
                         <li><a href="products.html" class="nav-link">Bộ Sưu Tập</a></li>
                         <li><a href="products.html?sale=1" class="nav-link">Sale</a></li>
                     </ul>
@@ -68,7 +68,7 @@
                         </button>
                     </div>
 
-                    <button class="header-icon" title="Tài khoản" onclick="AuthManager.showLogin()">
+                    <button class="header-icon" title="Tài khoản" >
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -144,7 +144,7 @@
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="hero-image-main"><img src="assets/icons/hero-image-main.jpg" alt=""></div>
+                <div class="hero-image-main"><img src="../assets/images/hero/hero-image-main.jpg" alt=""></div>
                 <!-- <div class="hero-image-floating">
                     <span class="floating-card-icon">👔</span>
                     <span class="floating-card-text">Áo Sơ Mi</span>
@@ -167,34 +167,34 @@
             <div class="categories-grid">
                 <div class="category-card">
                     <div class="category-bg"></div>
-                    <img src="assets/icons/pants.png" alt="Thời Trang Nam" class="category-icon">
+                    <img src="../assets/images/categories/pants.png" alt="Thời Trang Nam" class="category-icon">
                     <div class="category-content">
                         <h3 class="category-title">Thời Trang Nam</h3>
                         <p class="category-count">250+ sản phẩm</p>
-                        <a href="products.html?category=nam" class="category-link">Khám phá →</a>
+                        <a href="products.html?gender=nam" class="category-link">Khám phá →</a>
                     </div>
                 </div>
                 <div class="category-card">
                     <div class="category-bg"></div>
-                    <img src="assets/icons/bas33544.png" alt="Thời Trang Nữ" class="category-icon">
+                    <img src="../assets/images/categories/bas33544.png" alt="Thời Trang Nữ" class="category-icon">
                     <div class="category-content">
                         <h3 class="category-title">Thời Trang Nữ</h3>
                         <p class="category-count">380+ sản phẩm</p>
-                        <a href="products.html?category=nu" class="category-link">Khám phá →</a>
+                        <a href="products.html?gender=nu" class="category-link">Khám phá →</a>
                     </div>
                 </div>
                 <div class="category-card">
                     <div class="category-bg"></div>
-                    <img src="assets/icons/phukien.png" alt="Phụ Kiện" class="category-icon">
+                    <img src="../assets/images/categories/phukien.png" alt="Phụ Kiện" class="category-icon">
                     <div class="category-content">
                         <h3 class="category-title">Phụ Kiện</h3>
                         <p class="category-count">150+ sản phẩm</p>
-                        <a href="products.html?category=phu-kien" class="category-link">Khám phá →</a>
+                        <a href="products.html?gender=phu-kien" class="category-link">Khám phá →</a>
                     </div>
                 </div>
                 <div class="category-card">
                     <div class="category-bg"></div>
-                    <img src="assets/icons/sale.png" alt="Khuyến Mãi" class="category-icon">
+                    <img src="../assets/images/categories/sale.png" alt="Khuyến Mãi" class="category-icon">
                     <div class="category-content">
                         <h3 class="category-title">Khuyến Mãi</h3>
                         <p class="category-count">Giảm đến 50%</p>
@@ -258,7 +258,7 @@
                 <a href="#" class="btn btn-accent">Mua Ngay</a>
             </div>
             <div class="promo-visual">
-                <div class="promo-image"><img src="assets/icons/promo.jpg" alt="promo-image"></div>
+                <div class="promo-image"><img src="../assets/images/banners/promo.jpg" alt="promo-image"></div>
             </div>
         </div>
     </section>
@@ -271,7 +271,7 @@
             <div class="arrivals-grid">
                 <div class="arrival-card">
                     <div class="arrival-bg"></div>
-                    <span class="arrival-icon"><img src="assets/icons/fas54091.png" alt="ao-so-mi"></span>
+                    <span class="arrival-icon"><img src="../assets/images/products/fas54091.png" alt="ao-so-mi"></span>
                     <div class="arrival-content">
                         <h3 class="arrival-title">Áo sơ mi công sở</h3>
                         <p class="arrival-price">688,000đ</p>
@@ -280,7 +280,7 @@
                 </div>
                 <div class="arrival-card">
                     <div class="arrival-bg"></div>
-                    <span class="arrival-icon"><img src="assets/icons/123-removebg-preview.png" alt="ao-so-mi"></span>
+                    <span class="arrival-icon"><img src="../assets/images/products/123-removebg-preview.png" alt="ao-so-mi"></span>
                     <div class="arrival-content">
                         <h3 class="arrival-title">Áo Thun T-shirt</h3>
                         <p class="arrival-price">110,000đ</p>
@@ -289,7 +289,7 @@
                 </div>
                 <div class="arrival-card">
                     <div class="arrival-bg"></div>
-                    <span class="arrival-icon"><img src="assets/icons/tui-removebg-preview.png" alt="ao-so-mi"></span>
+                    <span class="arrival-icon"><img src="../assets/images/products/tui-removebg-preview.png" alt="ao-so-mi"></span>
                     <div class="arrival-content">
                         <h3 class="arrival-title">TDV Quai Dài Terra</h3>
                         <p class="arrival-price">1,080,000đ</p>
@@ -304,25 +304,25 @@
         <div class="container">
             <div class="features-grid">
                 <div class="feature-item">
-                    <img class="feature-icon" src="assets/icons/delivery-truck.png" alt="Vận chuyển"
+                    <img class="feature-icon" src="../assets/icons/delivery-truck.png" alt="Vận chuyển"
                         style="width:48px;height:48px">
                     <h4 class="feature-title">Miễn Phí Vận Chuyển</h4>
                     <p class="feature-text">Cho đơn hàng từ 500.000đ</p>
                 </div>
                 <div class="feature-item">
-                    <img class="feature-icon" src="assets/icons/return.png" alt="Đổi trả"
+                    <img class="feature-icon" src="../assets/icons/return.png" alt="Đổi trả"
                         style="width:48px;height:48px">
                     <h4 class="feature-title">Đổi Trả Dễ Dàng</h4>
                     <p class="feature-text">Trong vòng 30 ngày</p>
                 </div>
                 <div class="feature-item">
-                    <img class="feature-icon" src="assets/icons/credit-card.png" alt="Thanh toán"
+                    <img class="feature-icon" src="../assets/icons/credit-card.png" alt="Thanh toán"
                         style="width:48px;height:48px">
                     <h4 class="feature-title">Thanh Toán An Toàn</h4>
                     <p class="feature-text">Bảo mật 100%</p>
                 </div>
                 <div class="feature-item">
-                    <img class="feature-icon" src="assets/icons/headphones.png" alt="Hỗ trợ"
+                    <img class="feature-icon" src="../assets/icons/headphones.png" alt="Hỗ trợ"
                         style="width:48px;height:48px">
                     <h4 class="feature-title">Hỗ Trợ 24/7</h4>
                     <p class="feature-text">Tư vấn tận tình</p>
@@ -333,7 +333,7 @@
 
     <section class="newsletter section">
         <div class="container">
-            <div class="newsletter-icon"><img src="assets/icons/heart.png" alt="Heart" style="width:68px;height:68px">
+            <div class="newsletter-icon"><img src="../assets/icons/heart.png" alt="Heart" style="width:68px;height:68px">
             </div>
             <h2 class="newsletter-title">Đăng Ký Nhận Tin</h2>
             <p class="newsletter-text">Đăng ký để nhận thông tin về ưu đãi độc quyền</p>
@@ -349,7 +349,7 @@
             <div class="footer-main">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <div class="footer-logo-icon"><img src="assets/icons/logo.jpg" alt="logo"
+                        <div class="footer-logo-icon"><img src="../assets/icons/logo.jpg" alt="logo"
                                 style="width:30px;height:30px;border-radius:6px;"></div>
                         LUXE Fashion
                     </div>
@@ -357,13 +357,13 @@
                         LUXE Fashion - Thương hiệu thời trang cao cấp hàng đầu Việt Nam.
                     </p>
                     <div class="footer-social">
-                        <a href="#" class="social-link"><img src="assets/icons/instagram.png" alt="Instagram"
+                        <a href="#" class="social-link"><img src="../assets/icons/instagram.png" alt="Instagram"
                                 style="width:28px;height:28px"></a>
-                        <a href="#" class="social-link"><img src="assets/icons/facebook.png" alt="Facebook"
+                        <a href="#" class="social-link"><img src="../assets/icons/facebook.png" alt="Facebook"
                                 style="width:28px;height:28px"></a>
-                        <a href="#" class="social-link"><img src="assets/icons/tiktok.png" alt="TikTok"
+                        <a href="#" class="social-link"><img src="../assets/icons/tiktok.png" alt="TikTok"
                                 style="width:28px;height:28px"></a>
-                        <a href="#" class="social-link"><img src="assets/icons/youtube.png" alt="YouTube"
+                        <a href="#" class="social-link"><img src="../assets/icons/youtube.png" alt="YouTube"
                                 style="width:28px;height:28px"></a>
                     </div>
                 </div>
@@ -391,11 +391,11 @@
                 <div class="footer-column">
                     <h4 class="footer-title">Liên Hệ</h4>
                     <div class="footer-contact">
-                        <div class="footer-contact-item"><img src="assets/icons/placeholder.png" alt="Location"
+                        <div class="footer-contact-item"><img src="../assets/icons/placeholder.png" alt="Location"
                                 style="width:28px;height:28px">123 Nguyễn Huệ, Q.1, TP.HCM</div>
-                        <div class="footer-contact-item"><img src="assets/icons/phone-call.png" alt="Phone"
+                        <div class="footer-contact-item"><img src="../assets/icons/phone-call.png" alt="Phone"
                                 style="width:28px;height:28px">1900 xxxx</div>
-                        <div class="footer-contact-item"><img src="assets/icons/gmail.png" alt="Email"
+                        <div class="footer-contact-item"><img src="../assets/icons/gmail.png" alt="Email"
                                 style="width:28px;height:28px">support@luxefashion.vn</div>
                     </div>
                 </div>
@@ -419,8 +419,8 @@
         </svg>
     </button>
 
-    <script src="assets/js/modules/auth.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/modules/auth.js"></script>
+    <script src="../assets/js/app.js"></script>
 </body>
 
 </html>

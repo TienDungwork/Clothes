@@ -27,6 +27,16 @@ const AuthManager = {
                 this.updateUI();
                 this.closeModal();
                 Toast.success('Đăng nhập thành công!');
+
+                // Refresh cart to get user's cart (with merged guest cart)
+                if (typeof CartManager !== 'undefined') {
+                    await CartManager.refresh();
+                }
+
+                // Redirect to admin page if user is admin
+                if (this.user.role === 'admin') {
+                    window.location.href = '/pages/admin.php';
+                }
             } else {
                 Toast.error(response.message);
             }
@@ -83,8 +93,8 @@ const AuthManager = {
                 dropdown.className = 'user-menu-dropdown';
                 dropdown.innerHTML = `
                     <span class="user-menu-item" style="font-weight:600;color:var(--secondary)">${this.user.full_name}</span>
-                    <a href="#" class="user-menu-item">Tài khoản</a>
-                    <a href="#" class="user-menu-item">Đơn hàng</a>
+                    <a href="/pages/account.html" class="user-menu-item">Tài khoản</a>
+                    <a href="/pages/orders.html" class="user-menu-item">Đơn hàng</a>
                     <a href="#" class="user-menu-item" id="logoutBtn">Đăng xuất</a>
                 `;
                 userIcon.appendChild(dropdown);
@@ -221,9 +231,36 @@ const AuthManager = {
     bindEvents() {
         document.addEventListener('click', (e) => {
             const userIcon = e.target.closest('.header-icon[title="Tài khoản"]');
-            if (userIcon && !this.user) {
+
+            // Nếu click vào link trong dropdown, cho phép navigate
+            const menuLink = e.target.closest('.user-menu-item[href]:not(#logoutBtn)');
+            if (menuLink && menuLink.getAttribute('href') !== '#') {
+                return; // Cho phép link hoạt động bình thường
+            }
+
+            if (userIcon) {
                 e.preventDefault();
-                this.showLogin();
+                e.stopPropagation();
+
+                console.log('User icon clicked, this.user:', this.user);
+
+                if (!this.user) {
+                    // Chưa đăng nhập -> hiện modal login
+                    this.showLogin();
+                } else {
+                    // Đã đăng nhập -> toggle dropdown menu
+                    const dropdown = userIcon.querySelector('.user-menu-dropdown');
+                    console.log('Dropdown element:', dropdown);
+                    if (dropdown) {
+                        dropdown.classList.toggle('show');
+                    }
+                }
+            }
+
+            // Đóng dropdown khi click bên ngoài
+            if (!e.target.closest('.header-icon[title="Tài khoản"]')) {
+                const dropdown = document.querySelector('.user-menu-dropdown.show');
+                if (dropdown) dropdown.classList.remove('show');
             }
 
             if (e.target.closest('.modal-overlay') === e.target) {

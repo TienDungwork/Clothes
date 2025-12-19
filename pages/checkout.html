@@ -10,10 +10,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/header.css">
-    <link rel="stylesheet" href="assets/css/footer.css">
-    <link rel="stylesheet" href="assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
     <style>
         .checkout-page {
             padding: 160px 0 60px;
@@ -343,7 +343,7 @@
         <div class="header-main">
             <div class="container">
                 <a href="index.html" class="logo">
-                    <div class="logo-icon"><img src="assets/icons/logo.jpg" alt="logo-icon"></div>
+                    <div class="logo-icon"><img src="../assets/icons/logo.jpg" alt="logo-icon"></div>
                     LUXE
                 </a>
                 <div class="header-actions">
@@ -480,16 +480,33 @@
         </div>
     </section>
 
-    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/app.js"></script>
     <script>
-        const CONFIG = { API_URL: './api/index.php', CURRENCY: '₫' };
-
         document.addEventListener('DOMContentLoaded', async () => {
             Toast.init();
             await CartManager.init();
+            autoFillUserInfo();
             renderOrderSummary();
             bindEvents();
         });
+
+        // Auto-fill form with logged-in user's info
+        function autoFillUserInfo() {
+            const userData = sessionStorage.getItem('luxe_user');
+            if (!userData) return;
+
+            try {
+                const user = JSON.parse(userData);
+                const form = document.getElementById('shippingForm');
+
+                if (user.full_name) form.customer_name.value = user.full_name;
+                if (user.email) form.customer_email.value = user.email;
+                if (user.phone) form.customer_phone.value = user.phone;
+                if (user.address) form.shipping_address.value = user.address;
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+            }
+        }
 
         function renderOrderSummary() {
             const cart = CartManager.cart;
@@ -559,8 +576,10 @@
                         document.getElementById('checkoutForm').style.display = 'none';
                         document.getElementById('orderSuccess').style.display = 'block';
                         document.getElementById('orderCode').textContent = data.order_code;
-                        CartManager.cart = null;
-                        document.querySelector('.cart-count').textContent = '0';
+
+                        // Reset cart state
+                        CartManager.cart = { items: [], item_count: 0, subtotal: 0, total: 0 };
+                        CartManager.updateUI();
                     } else {
                         Toast.error(data.message || 'Có lỗi xảy ra');
                         btn.disabled = false;

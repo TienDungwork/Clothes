@@ -36,6 +36,12 @@ class Product
             $params[] = $filters['category_slug'];
         }
 
+        // Gender filter (nam, nu, unisex, phu-kien)
+        if (!empty($filters['gender'])) {
+            $where[] = 'p.gender = ?';
+            $params[] = $filters['gender'];
+        }
+
         // Price range filter
         if (!empty($filters['min_price'])) {
             $where[] = 'COALESCE(p.sale_price, p.price) >= ?';

@@ -10,10 +10,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/header.css">
-    <link rel="stylesheet" href="assets/css/footer.css">
-    <link rel="stylesheet" href="assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
     <style>
         .page-header {
             padding: 140px 0 40px;
@@ -431,15 +431,15 @@
         <div class="header-main">
             <div class="container">
                 <a href="index.html" class="logo">
-                    <div class="logo-icon"><img src="assets/icons/logo.jpg" alt="logo-icon"></div>
+                    <div class="logo-icon"><img src="../assets/icons/logo.jpg" alt="logo-icon"></div>
                     LUXE
                 </a>
                 <nav class="nav">
                     <ul class="nav-menu">
                         <li><a href="index.html" class="nav-link">Trang Chủ</a></li>
-                        <li><a href="products.html?category=nam" class="nav-link">Thời Trang Nam</a></li>
-                        <li><a href="products.html?category=nu" class="nav-link">Thời Trang Nữ</a></li>
-                        <li><a href="products.html?category=phu-kien" class="nav-link">Phụ Kiện</a></li>
+                        <li><a href="products.html?gender=nam" class="nav-link">Thời Trang Nam</a></li>
+                        <li><a href="products.html?gender=nu" class="nav-link">Thời Trang Nữ</a></li>
+                        <li><a href="products.html?gender=phu-kien" class="nav-link">Phụ Kiện</a></li>
                         <li><a href="products.html?sale=1" class="nav-link">Sale</a></li>
                     </ul>
                 </nav>
@@ -454,7 +454,7 @@
                             </svg>
                         </button>
                     </div>
-                    <button class="header-icon" title="Tài khoản" onclick="AuthManager.showLogin()">
+                    <button class="header-icon" title="Tài khoản" >
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -577,8 +577,8 @@
         </div>
     </footer>
 
-    <script src="assets/js/modules/auth.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/modules/auth.js"></script>
+    <script src="../assets/js/app.js"></script>
     <script>
         let selectedItems = new Set();
 

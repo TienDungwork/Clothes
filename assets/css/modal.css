@@ -235,7 +235,8 @@
     transition: all var(--transition);
 }
 
-.user-menu:hover .user-menu-dropdown {
+.user-menu:hover .user-menu-dropdown,
+.user-menu-dropdown.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);

@@ -12,7 +12,7 @@
 // CONFIGURATION
 // ========================================
 const CONFIG = {
-    API_URL: './api/index.php',
+    API_URL: '/api/index.php',
     CURRENCY: '₫',
     ANIMATION_DURATION: 300,
     DEBOUNCE_DELAY: 300,

@@ -1,8 +1,8 @@
 <?php
 define('LUXE_APP', true);
-require_once 'config/config.php';
-require_once 'includes/Database.php';
-require_once 'includes/models/Product.php';
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../includes/Database.php';
+require_once __DIR__ . '/../includes/models/Product.php';
 
 $slug = $_GET['slug'] ?? '';
 $id = (int)($_GET['id'] ?? 0);
@@ -26,11 +26,11 @@ $relatedProducts = $productModel->getRelated($product['id'], $product['category_
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/header.css">
-    <link rel="stylesheet" href="assets/css/products.css">
-    <link rel="stylesheet" href="assets/css/footer.css">
-    <link rel="stylesheet" href="assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/products.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
     <style>
         .product-page { padding: 160px 0 60px; }
         .product-container {
@@ -51,7 +51,8 @@ $relatedProducts = $productModel->getRelated($product['id'], $product['category_
         .gallery-main img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            display: block;
         }
         .gallery-thumbs {
             display: grid;
@@ -281,15 +282,15 @@ $relatedProducts = $productModel->getRelated($product['id'], $product['category_
         <div class="header-main">
             <div class="container">
                 <a href="index.html" class="logo">
-                    <div class="logo-icon"><img src="assets/icons/logo.jpg" alt="logo-icon"></div>
+                    <div class="logo-icon"><img src="../assets/icons/logo.jpg" alt="logo-icon"></div>
                     LUXE
                 </a>
                 <nav class="nav">
                     <ul class="nav-menu">
                         <li><a href="index.html" class="nav-link">Trang Chủ</a></li>
-                        <li><a href="products.html?category=nam" class="nav-link">Thời Trang Nam</a></li>
-                        <li><a href="products.html?category=nu" class="nav-link">Thời Trang Nữ</a></li>
-                        <li><a href="products.html?category=phu-kien" class="nav-link">Phụ Kiện</a></li>
+                        <li><a href="products.html?gender=nam" class="nav-link">Thời Trang Nam</a></li>
+                        <li><a href="products.html?gender=nu" class="nav-link">Thời Trang Nữ</a></li>
+                        <li><a href="products.html?gender=phu-kien" class="nav-link">Phụ Kiện</a></li>
                     </ul>
                 </nav>
                 <div class="header-actions">
@@ -326,8 +327,16 @@ $relatedProducts = $productModel->getRelated($product['id'], $product['category_
             <div class="product-container">
                 <div class="product-gallery">
                     <div class="gallery-main" id="galleryMain">
-                        <?php if (!empty($product['images'])): ?>
-                            <img src="<?= $product['images'][0]['image_url'] ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+                        <?php 
+                        $mainImage = null;
+                        if (!empty($product['images'])) {
+                            $mainImage = $product['images'][0]['image_url'];
+                        } elseif (!empty($product['image'])) {
+                            $mainImage = $product['image'];
+                        }
+                        ?>
+                        <?php if ($mainImage): ?>
+                            <img src="<?= $mainImage ?>" alt="<?= htmlspecialchars($product['name']) ?>">
                         <?php else: ?>
                             <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:8rem">👗</div>
                         <?php endif; ?>
@@ -408,15 +417,15 @@ $relatedProducts = $productModel->getRelated($product['id'], $product['category_
 
                     <div class="product-features">
                         <div class="feature-item">
-                            <img class="feature-icon" src="assets/icons/delivery-truck.png" alt="" style="width:24px;height:24px">
+                            <img class="feature-icon" src="../assets/icons/delivery-truck.png" alt="" style="width:24px;height:24px">
                             <span>Miễn phí vận chuyển</span>
                         </div>
                         <div class="feature-item">
-                            <img class="feature-icon" src="assets/icons/return.png" alt="" style="width:24px;height:24px">
+                            <img class="feature-icon" src="../assets/icons/return.png" alt="" style="width:24px;height:24px">
                             <span>Đổi trả 30 ngày</span>
                         </div>
                         <div class="feature-item">
-                            <img class="feature-icon" src="assets/icons/product.png" alt="" style="width:24px;height:24px">
+                            <img class="feature-icon" src="../assets/icons/product.png" alt="" style="width:24px;height:24px">
                             <span>Hàng chính hãng</span>
                         </div>
                     </div>
@@ -460,7 +469,7 @@ $relatedProducts = $productModel->getRelated($product['id'], $product['category_
         </div>
     </footer>
 
-    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/app.js"></script>
     <script>
         const productId = <?= $product['id'] ?>;
         let selectedVariant = null;
