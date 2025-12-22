@@ -14,7 +14,7 @@ if (!defined('LUXE_APP')) {
 define('DB_HOST', '127.0.0.1:3307');
 define('DB_NAME', 'luxe_fashion');
 define('DB_USER', 'root');
-define('DB_PASS', 'luxe123');
+define('DB_PASS', 'root');
 define('DB_CHARSET', 'utf8mb4');
 
 // Site Configuration

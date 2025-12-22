@@ -281,74 +281,12 @@ CREATE TABLE settings (
 ) ENGINE=InnoDB;
 
 -- INSERT SAMPLE DATA
-
--- Insert Categories
-INSERT INTO categories (name, slug, description, image) VALUES
-('Thời Trang Nam', 'thoi-trang-nam', 'Bộ sưu tập thời trang nam cao cấp', 'categories/men.jpg'),
-('Thời Trang Nữ', 'thoi-trang-nu', 'Bộ sưu tập thời trang nữ thanh lịch', 'categories/women.jpg'),
-('Phụ Kiện', 'phu-kien', 'Phụ kiện thời trang đa dạng', 'categories/accessories.jpg'),
-('Sale', 'sale', 'Sản phẩm giảm giá đặc biệt', 'categories/sale.jpg');
-
--- Insert Sub-categories
-INSERT INTO categories (name, slug, description, parent_id) VALUES
-('Áo Sơ Mi', 'ao-so-mi', 'Áo sơ mi nam các loại', 1),
-('Quần Tây', 'quan-tay', 'Quần tây công sở', 1),
-('Áo Khoác', 'ao-khoac', 'Áo khoác nam', 1),
-('Đầm', 'dam', 'Đầm nữ các loại', 2),
-('Áo Kiểu', 'ao-kieu', 'Áo kiểu nữ thời trang', 2),
-('Chân Váy', 'chan-vay', 'Chân váy nữ', 2),
-('Túi Xách', 'tui-xach', 'Túi xách thời trang', 3),
-('Giày Dép', 'giay-dep', 'Giày dép nam nữ', 3),
-('Khăn & Phụ Kiện', 'khan-phu-kien', 'Khăn và phụ kiện khác', 3);
-
--- Insert Products
-INSERT INTO products (category_id, name, slug, description, short_description, price, sale_price, sku, stock_quantity, is_featured, is_new, is_bestseller, rating_avg, rating_count) VALUES
-(8, 'Đầm Dạ Hội Luxury', 'dam-da-hoi-luxury', 'Đầm dạ hội sang trọng với thiết kế tinh tế, phù hợp cho các buổi tiệc và sự kiện quan trọng.', 'Đầm dạ hội sang trọng', 1890000, NULL, 'DDH001', 50, 1, 1, 0, 5.0, 48),
-(5, 'Áo Sơ Mi Premium', 'ao-so-mi-premium', 'Áo sơ mi nam cao cấp với chất liệu cotton 100%, thoáng mát và sang trọng.', 'Áo sơ mi nam cao cấp', 890000, NULL, 'ASM001', 100, 1, 0, 1, 5.0, 125),
-(7, 'Blazer Elegance', 'blazer-elegance', 'Áo blazer nam thiết kế hiện đại, phù hợp công sở và các buổi gặp mặt quan trọng.', 'Blazer nam thanh lịch', 1990000, 1390000, 'BLZ001', 30, 1, 0, 0, 4.5, 86),
-(11, 'Túi Xách Classic', 'tui-xach-classic', 'Túi xách nữ phong cách classic, chất liệu da cao cấp.', 'Túi xách da cao cấp', 2490000, NULL, 'TXC001', 25, 1, 0, 0, 5.0, 63),
-(10, 'Quần Palazzo Silk', 'quan-palazzo-silk', 'Quần palazzo nữ chất liệu silk mềm mại, thoải mái.', 'Quần palazzo lụa', 1190000, NULL, 'QPS001', 45, 0, 1, 0, 4.5, 42),
-(12, 'Giày Cao Gót Velvet', 'giay-cao-got-velvet', 'Giày cao gót nhung sang trọng, êm ái khi di chuyển.', 'Giày cao gót nhung', 1690000, NULL, 'GCG001', 35, 1, 0, 1, 5.0, 91),
-(13, 'Khăn Lụa Họa Tiết', 'khan-lua-hoa-tiet', 'Khăn lụa cao cấp với họa tiết độc đáo.', 'Khăn lụa thời trang', 590000, 490000, 'KLH001', 80, 0, 0, 0, 4.0, 37),
-(5, 'T-Shirt Minimalist', 'tshirt-minimalist', 'Áo thun nam thiết kế tối giản, chất liệu cotton organic.', 'Áo thun tối giản', 390000, NULL, 'TSM001', 150, 0, 0, 1, 5.0, 156);
-
--- Insert Product Images
-INSERT INTO product_images (product_id, image_url, alt_text, is_primary) VALUES
-(1, 'products/dam-da-hoi-1.jpg', 'Đầm Dạ Hội Luxury - Mặt trước', 1),
-(1, 'products/dam-da-hoi-2.jpg', 'Đầm Dạ Hội Luxury - Mặt sau', 0),
-(2, 'products/ao-so-mi-1.jpg', 'Áo Sơ Mi Premium - Trắng', 1),
-(3, 'products/blazer-1.jpg', 'Blazer Elegance - Đen', 1),
-(4, 'products/tui-xach-1.jpg', 'Túi Xách Classic', 1),
-(5, 'products/quan-palazzo-1.jpg', 'Quần Palazzo Silk', 1),
-(6, 'products/giay-cao-got-1.jpg', 'Giày Cao Gót Velvet', 1),
-(7, 'products/khan-lua-1.jpg', 'Khăn Lụa Họa Tiết', 1),
-(8, 'products/tshirt-1.jpg', 'T-Shirt Minimalist', 1);
-
--- Insert Product Variants
-INSERT INTO product_variants (product_id, size, color, color_code, stock_quantity) VALUES
-(1, 'S', 'Đỏ', '#e63946', 10),
-(1, 'M', 'Đỏ', '#e63946', 15),
-(1, 'L', 'Đỏ', '#e63946', 15),
-(1, 'S', 'Đen', '#1a1a1a', 5),
-(1, 'M', 'Đen', '#1a1a1a', 10),
-(2, 'M', 'Trắng', '#ffffff', 30),
-(2, 'L', 'Trắng', '#ffffff', 25),
-(2, 'XL', 'Trắng', '#ffffff', 20),
-(2, 'M', 'Xanh', '#3d5a80', 15),
-(2, 'L', 'Xanh', '#3d5a80', 10);
-
--- Insert Coupons
-INSERT INTO coupons (code, description, discount_type, discount_value, min_order_amount, max_discount_amount, usage_limit, start_date, end_date) VALUES
-('WELCOME10', 'Giảm 10% cho khách hàng mới', 'percentage', 10, 500000, 200000, 1000, '2025-01-01 00:00:00', '2025-12-31 23:59:59'),
-('SUMMER50', 'Giảm 50K đơn từ 1 triệu', 'fixed', 50000, 1000000, NULL, 500, '2025-06-01 00:00:00', '2025-08-31 23:59:59'),
-('VIP20', 'Giảm 20% cho khách VIP', 'percentage', 20, 0, 500000, NULL, '2025-01-01 00:00:00', '2025-12-31 23:59:59');
-
 -- Insert Settings
 INSERT INTO settings (setting_key, setting_value, setting_group) VALUES
 ('site_name', 'LUXE Fashion', 'general'),
 ('site_email', 'support@luxefashion.vn', 'general'),
 ('site_phone', '1900 xxxx', 'general'),
-('site_address', '123 Nguyễn Huệ, Q.1, TP.HCM', 'general'),
+('site_address', 'Hà Nội', 'general'),
 ('free_shipping_threshold', '500000', 'shipping'),
 ('default_shipping_fee', '30000', 'shipping'),
 ('currency', 'VND', 'general'),
