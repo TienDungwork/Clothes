@@ -1008,6 +1008,8 @@ $categories = $db->query("SELECT * FROM categories ORDER BY name")->fetchAll();
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>
                     <button type="submit" class="btn btn-primary">Lưu sản phẩm</button>
                 </div>
+            </form>
+        </div>
     </div>
     
     <!-- Category Modal -->
